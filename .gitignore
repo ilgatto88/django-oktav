@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+launch.json
+settings.json
+.vscode
+venv/
+.env
+*cpython*
+
+*.sqlite3
