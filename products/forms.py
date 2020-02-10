@@ -48,7 +48,7 @@ class NewProductRequestForm(forms.Form):
     season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES)
     scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES)
     region_option = forms.ChoiceField(label='Region option', choices=REGION_OPTION_CHOICES)
-    region = forms.CharField(label='Region', max_length=1000)
+    region = forms.CharField(label='Region(s)', max_length=1000)
 
     period_start = forms.IntegerField(label='Period start', initial=2021)
     period_end = forms.IntegerField(label='Period end', initial=2050)

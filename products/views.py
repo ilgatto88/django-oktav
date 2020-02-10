@@ -3,14 +3,11 @@ from .forms import NewProductRequestForm
 from .oktav_parts_later_delete_this import ProductRequest
 
 def product_request(request):
-    if request.method == 'GET':
-        prf = NewProductRequestForm()
-        print('this is GET')
-        return render(request, 'products.html', {'prf': prf})
-
     if request.method == 'POST':
+        print('this is POST')
         prf = NewProductRequestForm(request.POST)
         if prf.is_valid():
+            print('is valid')
             PR = ProductRequest(
                 product_type = prf['product_type'],
                 parameter = prf['parameter'],
@@ -29,6 +26,12 @@ def product_request(request):
             )
 
             print(PR)
-            func = getattr(PR, product_catalog[PR.product_type]['function'])
-            func()
-        return 'func worked?'
+            #func = getattr(PR, product_catalog[PR.product_type]['function'])
+            #func()
+            return redirect('generating_product')
+        else:
+            print('not valid')
+    else:
+        prf = NewProductRequestForm()
+        print('this is GET')
+        return render(request, 'products.html', {'prf': prf})
