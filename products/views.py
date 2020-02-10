@@ -10,7 +10,7 @@ def product_request(request):
 
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
-        if product_request_form.is_valid():
+        if prf.is_valid():
             PR = ProductRequest(
                 product_type = prf['product_type'],
                 parameter = prf['parameter'],

@@ -1,6 +1,36 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Button, Fieldset, HTML, Div
+from crispy_forms.bootstrap import FormActions, StrictButton
 
 class NewProductRequestForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(NewProductRequestForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Generate'))
+        self.helper.layout = Layout(
+            'product_type',
+            'parameter',
+            'aggregation_period',
+            'season',
+            'scenario',
+            'region_option',
+            'region',
+            'period_start',
+            'period_end',
+            'reference_period_start',
+            'reference_period_end',
+            'lower_height_filter',
+            'upper_height_filter',
+            'output_path',
+            'output_type',
+            'visual_settings'
+        )
+
     PRODUCT_TYPE_CHOICES = (('Product #1', 'product1'), ('Product #2', 'product2'))
     PARAMETER_CHOICES = (('Parameter #1', 'parameter1'), ('Parameter #2', 'parameter2'))
     AGGRETATION_PERIOD_CHOICES = (('yearly', 'YS'), ('seasonal', 'QS-DEC'))
