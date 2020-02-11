@@ -32,7 +32,7 @@ def product_request(request):
             return redirect(reverse('product_result'))
     else:
         prf = NewProductRequestForm()
-        return render(request, 'products.html', {'prf': prf})
+        return render(request, 'products.html', {'form': prf})
 
 def product_result(request):
     return render(request, 'product_result.html')

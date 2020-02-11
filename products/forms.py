@@ -4,6 +4,7 @@ from crispy_forms.layout import Submit, Layout, Button, Fieldset, HTML, Div
 from crispy_forms.bootstrap import FormActions, StrictButton
 
 class NewProductRequestForm(forms.Form):
+    """
     def clean(self):
         cleaned_data = super().clean()
         return self.cleaned_data
@@ -34,7 +35,7 @@ class NewProductRequestForm(forms.Form):
             'output_type',
             'visual_settings'
         )
-
+    """
     PRODUCT_TYPE_CHOICES = (('Product #1', 'product1'), ('Product #2', 'product2'))
     PARAMETER_CHOICES = (('Parameter #1', 'parameter1'), ('Parameter #2', 'parameter2'))
     AGGRETATION_PERIOD_CHOICES = (('yearly', 'YS'), ('seasonal', 'QS-DEC'))
