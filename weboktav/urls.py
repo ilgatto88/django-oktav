@@ -19,6 +19,8 @@ from products import views as products_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', products_view.product_request, name = 'products'),
-    url(r'^generating', products_view.product_request, name = 'generating_product')
+    url(r'^$', products_view.home, name = 'home'),
+    url(r'^home', products_view.home, name = 'home'),
+    url(r'^products', products_view.product_request, name = 'products'),
+    url(r'^result', products_view.product_result, name = 'product_result')
 ]

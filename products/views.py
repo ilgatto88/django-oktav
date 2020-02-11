@@ -1,13 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
 from .oktav_parts_later_delete_this import ProductRequest
+from django.http.response import HttpResponseRedirect
+
+def home(request):
+    return render(request, 'home.html')
 
 def product_request(request):
     if request.method == 'POST':
-        print('this is POST')
         prf = NewProductRequestForm(request.POST)
         if prf.is_valid():
-            print('is valid')
             PR = ProductRequest(
                 product_type = prf['product_type'],
                 parameter = prf['parameter'],
@@ -24,14 +26,14 @@ def product_request(request):
                 output_path = prf['output_path'],
                 output_type = prf['output_type']
             )
-
             print(PR)
             #func = getattr(PR, product_catalog[PR.product_type]['function'])
             #func()
-            return redirect('generating_product')
-        else:
-            print('not valid')
+            return redirect(reverse('product_result'))
     else:
         prf = NewProductRequestForm()
-        print('this is GET')
         return render(request, 'products.html', {'prf': prf})
+
+def product_result(request):
+    return render(request, 'product_result.html')
+

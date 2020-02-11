@@ -1,3 +1,5 @@
+
+
 class ProductRequest:
     def __init__(self, product_type, parameter, aggregation_period, season, scenario,
         region_option, region, period, reference_period, lower_height_filter,
@@ -20,5 +22,5 @@ class ProductRequest:
 
         self.model_statistics = 'mean'
 
-        self.dataset = product_catalog[self.product_type]['dataset']
-        self.outname = self.product_output_name_generator()
+        self.dataset = 'oeks' #product_catalog[self.product_type]['dataset']
+        self.outname = 'test_name' #self.product_output_name_generator()
