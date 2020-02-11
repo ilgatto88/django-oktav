@@ -9,6 +9,7 @@ def home(request):
 def product_request(request):
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
+        print(prf.errors)
         if prf.is_valid():
             PR = ProductRequest(
                 product_type = prf['product_type'],

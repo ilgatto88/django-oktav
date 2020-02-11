@@ -50,21 +50,22 @@ class NewProductRequestForm(forms.Form):
     parameter = forms.ChoiceField(label='Parameter', choices=PARAMETER_CHOICES)
     parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False)
     aggregation_period = forms.ChoiceField(label='Aggregation period', choices=AGGRETATION_PERIOD_CHOICES)
-    season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES)
-    scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES)
+    season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False)
+    scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES, required=False)
     region_option = forms.ChoiceField(label='Region option', choices=REGION_OPTION_CHOICES)
-    region = forms.CharField(label='Region(s)', max_length=1000)
+    region = forms.CharField(label='Region(s)', max_length=1000, required=True)
 
     period_start = forms.IntegerField(label='Period start', initial=2021)
     period_end = forms.IntegerField(label='Period end', initial=2050)
+    reference_period_checkbox = forms.BooleanField(label="Reference period", required=False)
     reference_period_start = forms.IntegerField(label='Reference period start', initial=1971)
     reference_period_end = forms.IntegerField(label='Reference period end', initial=2000)
-    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0)
-    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0)
+    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False)
+    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False)
 
     output_path = forms.CharField(label='Output path', initial=BASE_OUTPUT_PATH)
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
-    visual_settings = forms.CharField(label='Visual settings', max_length=1000)
+    visual_settings = forms.CharField(label='Visual settings', max_length=1000, required=False)
 
 class NewProductVisualSettings(forms.Form):
     colorscale = forms.CharField(max_length=200)
