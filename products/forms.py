@@ -4,48 +4,17 @@ from crispy_forms.layout import Submit, Layout, Button, Fieldset, HTML, Div
 from crispy_forms.bootstrap import FormActions, StrictButton
 
 class NewProductRequestForm(forms.Form):
-    """
-    def clean(self):
-        cleaned_data = super().clean()
-        return self.cleaned_data
-
-    def __init__(self, *args, **kwargs):
-        super(NewProductRequestForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.add_input(Submit('submit', 'Generate'))
-        self.helper.layout = Layout(
-            'product_type',
-            'parameter',
-            'aggregation_period',
-            'season',
-            'scenario',
-            'region_option',
-            'region',
-            'period_start',
-            'period_end',
-            'reference_period_start',
-            'reference_period_end',
-            'lower_height_filter',
-            'upper_height_filter',
-            'output_path',
-            'output_type',
-            'visual_settings'
-        )
-    """
-    PRODUCT_TYPE_CHOICES = (('Product #1', 'product1'), ('Product #2', 'product2'))
-    PARAMETER_CHOICES = (('Parameter #1', 'parameter1'), ('Parameter #2', 'parameter2'))
-    AGGRETATION_PERIOD_CHOICES = (('yearly', 'YS'), ('seasonal', 'QS-DEC'))
-    SEASON_CHOICES = (('Winter', 'DJF'), ('Spring', 'MAM'), ('Summer', 'JJA'), ('Autumn', 'SON'))
-    SCENARIO_CHOICES = (('RCP2.6', 'rcp26'), ('RCP4.5', 'rcp45'), ('RCP8.5', 'rcp85'))
-    REGION_OPTION_CHOICES = (('Austria', 'austria'), ('Bundesland', 'bundesland'), ('Municipality', 'gemeinde'))
-    OUTPUT_TYPE_CHOICES = (('pdf', 'pdf'), ('png', 'png'), ('txt', 'txt'))
+    # Choices
+    PRODUCT_TYPE_CHOICES = (('product1', 'Product #1'), ('product2', 'Product #2'))
+    PARAMETER_CHOICES = (('parameter1', 'Parameter #1'), ('parameter2', 'Parameter #2'))
+    AGGRETATION_PERIOD_CHOICES = (('YS', 'Yearly'), ('QS-DEC', 'Seasonal'))
+    SEASON_CHOICES = (('DJF', 'Winter'), ('MAM', 'Spring'), ('JJA', 'Summer'), ('SON', 'Autumn'))
+    SCENARIO_CHOICES = (('rcp26', 'RCP2.6'), ('rcp45', 'RCP4.5'), ('rcp85', 'RCP8.5'))
+    REGION_OPTION_CHOICES = (('austria', 'Austria'), ('bundesland', 'Bundesland'), ('gemeinde', 'Municipality'))
+    OUTPUT_TYPE_CHOICES = (('pdf', 'PDF'), ('png', 'PNG'), ('txt', 'TXT'))
     BASE_OUTPUT_PATH = '/home/jtordai/Desktop/'
 
-
+    # Product settings
     product_type = forms.ChoiceField(label='Product type', choices=PRODUCT_TYPE_CHOICES)
     parameter = forms.ChoiceField(label='Parameter', choices=PARAMETER_CHOICES)
     parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False)
@@ -65,56 +34,25 @@ class NewProductRequestForm(forms.Form):
 
     output_path = forms.CharField(label='Output path', initial=BASE_OUTPUT_PATH)
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
-    visual_settings = forms.CharField(label='Visual settings', max_length=1000, required=False)
 
-class NewProductVisualSettings(forms.Form):
-    colorscale = forms.CharField(max_length=200)
-    rivers = forms.BooleanField(initial=False)
-    municipality_borders = forms.BooleanField(initial=False)
-    state_borders = forms.BooleanField(initial=False)
-    country_borders = forms.BooleanField(initial=False)
-    hillshade = forms.BooleanField(initial=False)
-    linediagram_grid = forms.BooleanField(initial=False)
-    smooth = forms.BooleanField(initial=False)
-    infobox = forms.BooleanField(initial=False)
-    boxplot = forms.BooleanField(initial=False)
-    title = forms.BooleanField(initial=False)
-    secondary_y_axis = forms.BooleanField(initial=False)
+    # Extra product settings
+    COLORBAR_CHOICES = (('alfa', 'alfa'), ('bravo', 'bravo'))
+    ## Colorscale
+    colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
+    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, max_digits=9, decimal_places=1, required=False)
+    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, max_digits=9, decimal_places=1, required=False)
+    colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
 
-    def to_string(self):
-        vis_set_text = {
-            'colorscale': self.colorscale,
-            'rivers': self.rivers,
-            'municipality_borders': self.municipality_borders,
-            'state_borders': self.state_borders,
-            'country_borders': self.country_borders,
-            'hillshade': self.hillshade,
-            'linediagram_grid': self.linediagram_grid,
-            'smooth': self.smooth,
-            'infobox': self.infobox,
-            'boxplot': self.boxplot,
-            'title': self.title,
-            'secondary_y_axis': self.secondary_y_axis
-            }
-        return str(vis_set_text)
+    ## Additional checkboxes
+    rivers_extra = forms.BooleanField(label="Rivers", initial=False, required=False)
+    municipality_borders_extra = forms.BooleanField(label="Municipality borders", initial=False, required=False)
+    state_borders_extra = forms.BooleanField(label="State borders", initial=False, required=False)
+    country_borders_extra = forms.BooleanField(label="Country borders", initial=False, required=False)
+    hillshade_extra = forms.BooleanField(label="Hillshade", initial=False, required=False)
+    linediagram_grid_extra = forms.BooleanField(label="Grid", initial=False, required=False)
+    smooth_extra = forms.BooleanField(label="Smooth", initial=False, required=False)
+    infobox_extra = forms.BooleanField(label="Infobox", initial=False, required=False)
+    boxplot_extra = forms.BooleanField(label="Boxplot", initial=False, required=False)
+    title_extra = forms.BooleanField(label="Title", initial=False, required=False)
+    secondary_y_axis_extra = forms.BooleanField(label="Secondary y-axis", initial=False, required=False)
 
-class NewColorScale(forms.Form):
-    name = forms.CharField(max_length=50)
-    minval = forms.DecimalField(initial=0.0, max_digits=9, decimal_places=1)
-    maxval = forms.DecimalField(initial=0.0, max_digits=9, decimal_places=1)
-    step_size = forms.DecimalField(initial=0.0, max_digits=9, decimal_places=1)
-    bins = forms.IntegerField(initial=0)
-    color_count = forms.IntegerField(initial=0)
-    reverse = forms.BooleanField(initial=False)
-
-    def to_string(self):
-        cscale_text = {
-            'name': self.name,
-            'minval': self.minval,
-            'maxval': self.maxval,
-            'step_size': self.step_size,
-            'bins': self.bins,
-            'color_count': self.color_count,
-            'reverse': self.reverse
-        }
-        return str(cscale_text)

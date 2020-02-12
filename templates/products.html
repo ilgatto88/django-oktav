@@ -11,98 +11,107 @@
     {% csrf_token %}
     <div class="form-row">
       <div class="form-group col-md-4 mb-0">
-        {{ form.product_type|as_crispy_field }}
+        {{ product_form.product_type|as_crispy_field }}
+        {% with product_name="product_name" %}{% endwith %}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.scenario|as_crispy_field }}
+        {{ product_form.scenario|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4 mb-0">
-        {{ form.parameter|as_crispy_field }}
+        {{ product_form.parameter|as_crispy_field }}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.parameter2|as_crispy_field }}
+        {{ product_form.parameter2|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
     <div class="form-group col-md-4 mb-0">
-        {{ form.aggregation_period|as_crispy_field }}
+        {{ product_form.aggregation_period|as_crispy_field }}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.season|as_crispy_field }}
+        {{ product_form.season|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4 mb-0">
-        {{ form.region_option|as_crispy_field }}
+        {{ product_form.region_option|as_crispy_field }}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.region|as_crispy_field }}
+        {{ product_form.region|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-2 mb-0">
-        {{ form.period_start|as_crispy_field }}
+        {{ product_form.period_start|as_crispy_field }}
       </div>
       <div class="form-group col-md-2 mb-0">
-        {{ form.period_end|as_crispy_field }}
+        {{ product_form.period_end|as_crispy_field }}
       </div>
       <div class="form-group col-md-2 mb-0">
-        {{ form.reference_period_checkbox|as_crispy_field }}
+        {{ product_form.reference_period_checkbox|as_crispy_field }}
       </div>
       <div class="form-group col-md-2 mb-0">
-        {{ form.reference_period_start|as_crispy_field }}
+        {{ product_form.reference_period_start|as_crispy_field }}
       </div>
       <div class="form-group col-md-2 mb-0">
-        {{ form.reference_period_end|as_crispy_field }}
+        {{ product_form.reference_period_end|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4 mb-0">
-        {{ form.lower_height_filter|as_crispy_field }}
+        {{ product_form.lower_height_filter|as_crispy_field }}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.upper_height_filter|as_crispy_field }}
+        {{ product_form.upper_height_filter|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4 mb-0">
-        {{ form.output_path|as_crispy_field }}
+        {{ product_form.output_path|as_crispy_field }}
       </div>
       <div class="form-group col-md-4 mb-0">
-        {{ form.output_type|as_crispy_field }}
+        {{ product_form.output_type|as_crispy_field }}
       </div>
     </div>
+    <br \>
     <div class="container">
-      <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#CollapseVisSet" aria-expanded="false" aria-controls="CollapseVisSet">
+      <button class="btn btn-secondary btn-lg btn-block"
+              type="button" data-toggle="collapse" data-target="#CollapseVisSet"
+              aria-expanded="false" aria-controls="CollapseVisSet">
         Product settings
       </button>
       <div class="collapse" id="CollapseVisSet">
         <br \>
-        <form class="px-4 py-3">
-          <div class="form-group">
-            <label for="exampleDropdownFormEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
-          </div>
-          <div class="form-group">
-            <label for="exampleDropdownFormPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-            <label class="form-check-label" for="dropdownCheck">
-              Remember me
-            </label>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-0">
+            {{ product_form.colorscale_name_extra|as_crispy_field }}
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
-      </form>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-0">
+            {{ product_form.colorscale_minval_extra|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ product_form.colorscale_step_size_extra|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ product_form.colorscale_reverse_extra|as_crispy_field }}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-0">
+            {% for field in product_form %}
+              {% if 'extra' in field.name and 'colorscale' not in field.name %}
+                {{ field|as_crispy_field }}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary" aria-pressed="true">Generate</button>
   </form>
-  
 {% endblock %}
 
