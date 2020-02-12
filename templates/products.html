@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %}
   OKTAV Products
@@ -90,14 +91,19 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-4 mb-0">
+          <div class="form-group col-md-2 mb-0">
             {{ product_form.colorscale_minval_extra|as_crispy_field }}
           </div>
-          <div class="form-group col-md-4 mb-0">
+          <div class="form-group col-md-2 mb-0">
             {{ product_form.colorscale_step_size_extra|as_crispy_field }}
           </div>
-          <div class="form-group col-md-4 mb-0">
+          <div class="form-group col-md-2 mb-0">
             {{ product_form.colorscale_reverse_extra|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-2 mb-0">
+            <button class="btn btn-secondary" type="button" id="colorbar_generate_button">
+              Generate
+            </button>
           </div>
         </div>
         <div class="form-row">
@@ -111,7 +117,8 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" aria-pressed="true">Generate</button>
+    <button type="submit" class="btn btn-primary" aria-pressed="true">Start</button>
   </form>
+  <script src="{% static 'js/colorbar.js' %}"></script>
 {% endblock %}
 

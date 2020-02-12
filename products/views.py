@@ -8,11 +8,12 @@ def home(request):
 def product_request(request):
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
-        colorscale_dict = request.POST.get('colorscale_dict')
+        colorbar_dict = request.POST.get('colorbar_dict')
+        print(colorbar_dict)
         print(prf.errors)
         if prf.is_valid():
             visual_settings = {
-                'colorscale': colorscale_dict,
+                'colorscale': colorbar_dict,
                 'figsize_x': 30, 'figsize_y': 17, 'dpi': 300,
                 'rivers': request.POST.get('rivers_extra'),
                 'municipality_borders': request.POST.get('municipality_borders_extra'),
