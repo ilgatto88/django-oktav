@@ -2,18 +2,26 @@ from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
 from .oktav_parts_later_delete_this import ProductRequest
 
+# ezt le kell majd cserélni, minden productnak legyen sajátja
+default_colorbar_dict = '{"color_scale":"alfa","minval":0,"maxval":8,"step_size":1,"bins":"None","color_count":9,"reverse":false}'
+
 def home(request):
     return render(request, 'home.html')
 
 def product_request(request):
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
-        colorbar_dict = request.POST.get('colorbar_dict')
-        print(colorbar_dict)
         print(prf.errors)
         if prf.is_valid():
+
+            get_colorbar_dict = request.POST.get('colorscale_colorbar_dict_extra')
+            if get_colorbar_dict == 'NA':
+                cscale = default_colorbar_dict
+            else:
+                cscale = get_colorbar_dict
+            
             visual_settings = {
-                'colorscale': colorbar_dict,
+                'colorscale': cscale,
                 'figsize_x': 30, 'figsize_y': 17, 'dpi': 300,
                 'rivers': request.POST.get('rivers_extra'),
                 'municipality_borders': request.POST.get('municipality_borders_extra'),

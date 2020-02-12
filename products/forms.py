@@ -19,14 +19,14 @@ class NewProductRequestForm(forms.Form):
     parameter = forms.ChoiceField(label='Parameter', choices=PARAMETER_CHOICES)
     parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False)
     aggregation_period = forms.ChoiceField(label='Aggregation period', choices=AGGRETATION_PERIOD_CHOICES)
-    season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False)
+    season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False, disabled=True)
     scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES, required=False)
     region_option = forms.ChoiceField(label='Region option', choices=REGION_OPTION_CHOICES)
-    region = forms.CharField(label='Region(s)', max_length=1000, required=True)
+    region = forms.CharField(label='Region(s)', max_length=1000, required=False, disabled=True)
 
     period_start = forms.IntegerField(label='Period start', initial=2021)
     period_end = forms.IntegerField(label='Period end', initial=2050)
-    reference_period_checkbox = forms.BooleanField(label="Reference period", required=False)
+    reference_period_checkbox = forms.BooleanField(label="Reference period", required=False, initial=True)
     reference_period_start = forms.IntegerField(label='Reference period start', initial=1971)
     reference_period_end = forms.IntegerField(label='Reference period end', initial=2000)
     lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False)
@@ -42,6 +42,7 @@ class NewProductRequestForm(forms.Form):
     colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, max_digits=9, decimal_places=1, required=False)
     colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, max_digits=9, decimal_places=1, required=False)
     colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
+    colorscale_colorbar_dict_extra = forms.CharField(label="Colorbar", max_length=200, required = False, initial='NA')
 
     ## Additional checkboxes
     rivers_extra = forms.BooleanField(label="Rivers", initial=False, required=False)
