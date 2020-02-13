@@ -1,9 +1,9 @@
 form {
     margin-top: 10px;
     margin-left: 4px;
-    border: 1px solid black;
     margin: 20px;
     padding: 20px;
+    white-space: nowrap;
 }
 
 input {

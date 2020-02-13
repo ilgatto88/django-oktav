@@ -11,19 +11,19 @@
   <form method="POST">
     {% csrf_token %}
     <div class="form-row">
-      <div class="form-group col-md-3 mb-0 ml-4">
+      <div class="form-group col-md-3">
         {{ product_form.product_type|as_crispy_field }}
         {% with product_name="product_name" %}{% endwith %}
       </div>
-      <div class="form-group col-md-3 mb-0">
+      <div class="form-group col-md-3">
         {{ product_form.scenario|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-3 mb-0 ml-4">
+      <div class="form-group col-md-3">
         {{ product_form.parameter|as_crispy_field }}
       </div>
-      <div class="form-group col-md-3 mb-0">
+      <div class="form-group col-md-3">
         {{ product_form.parameter2|as_crispy_field }}
         <script>
           document.getElementById("id_parameter2").style.display = "none";
@@ -31,96 +31,95 @@
       </div>
     </div>
     <div class="form-row">
-    <div class="form-group col-md-3 mb-0 ml-4">
+    <div class="form-group col-md-3">
         {{ product_form.aggregation_period|as_crispy_field }}
       </div>
-      <div class="form-group col-md-3 mb-0">
+      <div class="form-group col-md-3">
         {{ product_form.season|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-3 mb-0 ml-4">
+      <div class="form-group col-md-3">
         {{ product_form.region_option|as_crispy_field }}
       </div>
-      <div class="form-group col-md-3 mb-0">
+      <div class="form-group col-md-3">
         {{ product_form.region|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-1 mb-0 ml-4">
+      <div class="form-group col-md-1">
         {{ product_form.period_start|as_crispy_field }}
       </div>
-      <div class="form-group col-md-1 mb-0">
+      <div class="form-group col-md-1">
         {{ product_form.period_end|as_crispy_field }}
       </div>
-      <div class="form-group col-md-1 mb-0"></div>
-      <div class="form-group ml-2">
+      <div class="form-group col-md-1"></div>
+      <div class="form-group">
         {{ product_form.reference_period_checkbox|as_crispy_field }}
       </div>
-      <div class="form-group col-md-1 mb-0">
+      <div class="form-group col-md-1">
         {{ product_form.reference_period_start|as_crispy_field }}
       </div>
-      <div class="form-group col-md-1 mb-0">
+      <div class="form-group col-md-1">
         <label style="color:white;">.</label>
         {{ product_form.reference_period_end|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-2 mb-0 ml-4">
+      <div class="form-group col-md-2">
         {{ product_form.lower_height_filter|as_crispy_field }}
       </div>
       <div class="form-col col-md-2">
         <p style="color:white;">f</p>
         <p align="center"> < height (m) <</p>
       </div>
-      <div class="form-group col-md-2 mb-0">
+      <div class="form-group col-md-2">
         {{ product_form.upper_height_filter|as_crispy_field }}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-3 mb-0 ml-4">
+      <div class="form-group col-md-3">
         {{ product_form.output_path|as_crispy_field }}
       </div>
-      <div class="form-group col-md-3 mb-0">
+      <div class="form-group col-md-3">
         {{ product_form.output_type|as_crispy_field }}
       </div>
     </div>
-    <div class="container col-md-6 ml-4">
-      <button class="btn btn-secondary w-100"
-              type="button" data-toggle="collapse" data-target="#CollapseVisSet"
+    <div class="form-row">
+      <button class="btn btn-secondary w-50" type="button"
+              data-toggle="collapse" data-target="#CollapseVisSet"
               aria-expanded="false" aria-controls="CollapseVisSet">
         Product settings
       </button>
       <div class="collapse" id="CollapseVisSet">
-        <br \>
         <div class="form-row">
-          <div class="form-group col-md-3 mb-0" style="display:none;">
+          <div class="form-group col-md-3" style="display:none;">
             {{ product_form.colorscale_colorbar_dict_extra|as_crispy_field }}
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-3 mb-0">
+          <div class="form-group col-md-3 mt-2">
             {{ product_form.colorscale_name_extra|as_crispy_field }}
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-2 mb-0">
+          <div class="form-group col-md-2">
             {{ product_form.colorscale_minval_extra|as_crispy_field }}
           </div>
-          <div class="form-group col-md-2 mb-0">
+          <div class="form-group col-md-2">
             {{ product_form.colorscale_step_size_extra|as_crispy_field }}
           </div>
-          <div class="form-group col-md-2 mb-0">
+          <div class="form-group col-md-2">
             {{ product_form.colorscale_reverse_extra|as_crispy_field }}
           </div>
-          <div class="form-group col-md-2 mb-0">
+          <div class="form-group col-md-2">
             <button class="btn btn-secondary" type="button" id="colorbar_generate_button" value="colorbar_dict">
               Generate
             </button>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-4 mb-0">
+          <div class="form-group col-md-4">
             {% for field in product_form %}
               {% if 'extra' in field.name and 'colorscale' not in field.name %}
                 {{ field|as_crispy_field }}
@@ -130,7 +129,7 @@
         </div>
       </div>
     </div>
-    <div class="container col-md-offset-3">
+    <div class="form-row">
       <button type="submit" class="btn btn-primary mt-4 w-25" aria-pressed="true">Start</button>
     </div>
   </form>
