@@ -26,11 +26,11 @@ class NewProductRequestForm(forms.Form):
 
     period_start = forms.IntegerField(label='Period start', initial=2021)
     period_end = forms.IntegerField(label='Period end', initial=2050)
-    reference_period_checkbox = forms.BooleanField(label="Reference period", required=False, initial=True)
-    reference_period_start = forms.IntegerField(label='Reference period start', initial=1971)
-    reference_period_end = forms.IntegerField(label='Reference period end', initial=2000)
-    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False)
-    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False)
+    reference_period_checkbox = forms.BooleanField(label="", required=False, initial=True)
+    reference_period_start = forms.IntegerField(label='Reference period', initial=1971, required=False)
+    reference_period_end = forms.IntegerField(label='', initial=2000, required=False)
+    lower_height_filter = forms.IntegerField(label='Lower height filter (m)', initial=0, required=False)
+    upper_height_filter = forms.IntegerField(label='Upper height filter (m)', initial=0, required=False)
 
     output_path = forms.CharField(label='Output path', initial=BASE_OUTPUT_PATH)
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
