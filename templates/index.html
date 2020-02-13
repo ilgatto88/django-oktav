@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <h1 class="mx-auto my-0 text-uppercase">Oktav</h1>
-    <h2 class="text-white-50 mx-auto mt-2 mb-0">Österreichisches KlimaTool für Analyse und Visualisierung</h2>
-    <h6 class="text-white-50 mx-auto mt-2 mb-3">v1.0</h6>
-    <a href="{% url 'products' %}" class="btn btn-primary js-scroll-trigger">Get Started</a>
+{% block index_content %}
+  <header class="masthead">
+    <div class="container d-flex h-100 align-items-center">
+      <div class="mx-auto text-center">
+        <h1 class="mx-auto my-0 text-uppercase">Oktav</h1>
+        <h2 class="text-white-50 mx-auto mt-2 mb-0">Österreichisches KlimaTool für Analyse und Visualisierung</h2>
+        <p stlye="font-size: 1rem;" class="text-white-50 mx-auto mt-2 mb-3">v1.0</p>
+        <a href="{% url 'products' %}" class="btn btn-primary js-scroll-trigger">Get Started</a>
+      </div>
+    </div>
+  </header>
 {% endblock %}

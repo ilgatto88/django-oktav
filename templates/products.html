@@ -1,139 +1,54 @@
 {% extends 'base.html' %}
 
-{% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %}
-  OKTAV Products
-{% endblock %}
+{% block product_content %}
+  <header class="masthead">
+    <div class="container d-flex h-100 align-items-center">
+      <div class="mx-auto text-left">
+        <section class="signup-section-oktav">
+          <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
 
-{% block content %}
-  <form method="POST" autocomplete="off">
-    {% csrf_token %}
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        {{ product_form.product_type|as_crispy_field }}
-        {% with product_name="product_name" %}{% endwith %}
-      </div>
-      <div class="form-group col-md-3">
-        {{ product_form.scenario|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        {{ product_form.parameter|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-3">
-        {{ product_form.parameter2|as_crispy_field }}
-        <script>
-          document.getElementById("id_parameter2").style.display = "none";
-        </script>
-      </div>
-    </div>
-    <div class="form-row">
-    <div class="form-group col-md-3">
-        {{ product_form.aggregation_period|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-3">
-        {{ product_form.season|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        {{ product_form.region_option|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-3">
-        {{ product_form.region|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-1">
-        {{ product_form.period_start|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-1">
-        {{ product_form.period_end|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-1"></div>
-      <div class="form-group">
-        {{ product_form.reference_period_checkbox|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-1">
-        {{ product_form.reference_period_start|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-1">
-        <label style="color:white;">.</label>
-        {{ product_form.reference_period_end|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-2">
-        {{ product_form.lower_height_filter|as_crispy_field }}
-      </div>
-      <div class="form-col col-md-2">
-        <p style="color:white;">f</p>
-        <p align="center"> < height (m) <</p>
-      </div>
-      <div class="form-group col-md-2">
-        {{ product_form.upper_height_filter|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        {{ product_form.output_path|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-3">
-        {{ product_form.output_type|as_crispy_field }}
-      </div>
-    </div>
-    <div class="form-row">
-      <button class="btn btn-secondary w-50" type="button"
-              data-toggle="collapse" data-target="#CollapseVisSet"
-              aria-expanded="false" aria-controls="CollapseVisSet">
-        Product settings
-      </button>
-      <div class="collapse" id="CollapseVisSet">
-        <div class="form-row">
-          <div class="form-group col-md-3" style="display:none;">
-            {{ product_form.colorscale_colorbar_dict_extra|as_crispy_field }}
+              <form method="post" class="form-inline d-flex" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="col-md-10 offset-md-1">
+                  <div class="container justify-content-center">
+                    <h2 class="text-white text-nowrap mb-1">Create a product request</h2>
+                    <hr style="background-color:white;">
+                  </div>
+                  <div class="form-row">
+                    <div class="col-lg-6 pb-3">
+                      <label for="id_product_type">Product type</label>
+                      {{ product_form.product_type }}
+                    </div>
+                    <div class="col-lg-6 pb-3">
+                      <label for="id_scenario">Scenario</label>
+                      {{ product_form.scenario }}
+                    </div>
+                    <div class="col-lg-6 pb-3">
+                      <label for="id_parameter">Parameter</label>
+                      {{ product_form.parameter }}
+                    </div>
+                    <div class="col-lg-6 pb-3">
+                      <label for="id_parameter2">2nd parameter</label>
+                      {{ product_form.parameter2 }}
+                    </div>
+                    <script>document.getElementById("id_parameter2").style.display = "none";</script>
+                  </div>
+
+                </div>
+                <!-- <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address..."> -->
+                <button type="submit" class="btn btn-primary mx-auto mt-2 mb-2">Start</button>
+              </form>
+
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-3 mt-2">
-            {{ product_form.colorscale_name_extra|as_crispy_field }}
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-2">
-            {{ product_form.colorscale_minval_extra|as_crispy_field }}
-          </div>
-          <div class="form-group col-md-2">
-            {{ product_form.colorscale_step_size_extra|as_crispy_field }}
-          </div>
-          <div class="form-group col-md-2">
-            {{ product_form.colorscale_reverse_extra|as_crispy_field }}
-          </div>
-          <div class="form-group col-md-2">
-            <button class="btn btn-secondary" type="button" id="colorbar_generate_button" value="colorbar_dict">
-              Generate
-            </button>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            {% for field in product_form %}
-              {% if 'extra' in field.name and 'colorscale' not in field.name %}
-                {{ field|as_crispy_field }}
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
+        </section>
       </div>
     </div>
-    <div class="form-row">
-      <button type="submit" class="btn btn-primary mt-4 w-25" aria-pressed="true">Start</button>
-    </div>
-  </form>
+  </header>
   <script src="{% static 'js/form_functions.js' %}"></script>
   <script src="{% static 'js/fetch_region.js' %}"></script>
 {% endblock %}
-
