@@ -9,9 +9,13 @@ window.onload = function(){
 function enableParameter2Field() {
     product_name = document.getElementById("id_product_type").value
     if (product_name == 'product2') {
-        document.getElementById("id_parameter2").style.display = "initial";
+        $(document).ready(function() {
+            $('[id$=id_parameter2]').show();
+        });
     } else {
-        document.getElementById("id_parameter2").style.display = "none";
+        $(document).ready(function() {
+            $('[id$=id_parameter2]').hide();
+        });
     }
 }
 

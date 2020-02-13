@@ -54,7 +54,7 @@ def product_request(request):
                 output_path = request.POST.get('output_path'),
                 output_type = request.POST.get('output_type')
             )
-            print(PR)
+            #print(PR)
             #func = getattr(PR, product_catalog[PR.product_type]['function'))
             #func()
             
