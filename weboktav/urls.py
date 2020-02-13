@@ -20,9 +20,8 @@ from region import views as region_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', products_view.home, name = 'home'),
-    url(r'^home', products_view.home, name = 'home'),
+    url(r'^$', products_view.index, name = 'index'),
     url(r'^products', products_view.product_request, name = 'products'),
     url(r'^result', products_view.product_result, name = 'product_result'),
-    url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions')
+    url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions'),
 ]

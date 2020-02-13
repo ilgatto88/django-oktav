@@ -70,3 +70,5 @@ def product_request(request):
 def product_result(request):
     return render(request, 'product_result.html')
 
+def index(request):
+    return render(request, 'index.html')
