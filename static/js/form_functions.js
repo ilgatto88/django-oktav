@@ -4,18 +4,28 @@ window.onload = function(){
     document.getElementById("id_region_option").onchange = enableRegionField;
     document.getElementById("id_aggregation_period").onchange = enableSeasonField;
     document.getElementById("id_product_type").onchange = enableParameter2Field;
+    document.getElementById("collapse_button").onclick = changeParagraphSizeOnCollapse;
 };
 
+// This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
+function changeParagraphSizeOnCollapse() {
+    empty_field = document.getElementById("empty-black-space");
+
+    if (empty_field.style.height == "400px") {
+        empty_field.style.height = "0px";
+    } else {
+        empty_field.style.height = "400px";
+    }
+}
+
+// This function enables and disables the 2nd parameter drop-down menu based on the product name
 function enableParameter2Field() {
     product_name = document.getElementById("id_product_type").value
+    parameter2_field = document.getElementById("id_parameter2")
     if (product_name == 'product2') {
-        $(document).ready(function() {
-            $('[id$=id_parameter2]').show();
-        });
+        parameter2_field.disabled = false;
     } else {
-        $(document).ready(function() {
-            $('[id$=id_parameter2]').hide();
-        });
+        parameter2_field.disabled = true;
     }
 }
 

@@ -148,7 +148,7 @@
           <div class="form-row mb-2">
             <div class="col w-50 ml-4">
               <div class="form-group">
-                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#CollapseVisSet" aria-expanded="false" aria-controls="CollapseVisSet">
+                <button class="btn btn-secondary" id="collapse_button" type="button" data-toggle="collapse" data-target="#CollapseVisSet" aria-expanded="false" aria-controls="CollapseVisSet">
                   Settings
                 </button>
               </div>
@@ -208,8 +208,8 @@
                 <div class="form-row">
                   <div class="form-col col-lg-6 ml-4">
                     <div class="form-group mb-0">
+                      {{ field|add_class:"oktav-dropdown" }}
                       <label class="text-nowrap" for={{ field.id_for_label }}>{{ field.label }}</label>
-                        {{ field|add_class:"oktav-dropdown" }}
                     </div>
                   </div>
                 </div>
@@ -220,6 +220,7 @@
       </section>
     </div>
   </header>
+  <p class="empty-black-space" id="empty-black-space"></p>
   <script src="{% static 'js/form_functions.js' %}"></script>
   <script src="{% static 'js/fetch_region.js' %}"></script>
 {% endblock %}

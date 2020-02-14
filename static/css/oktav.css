@@ -21,3 +21,11 @@
     font-size: 18px;
     font-weight: 1000;
 }
+
+.empty-black-space {
+    height: 0px;
+    color: white;
+    background-color: #161616;
+    margin: 0;
+    transition: all linear 0.3s;
+}
