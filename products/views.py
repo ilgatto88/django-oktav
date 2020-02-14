@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
 from .oktav_parts_later_delete_this import ProductRequest
+from .models import ProductFeature
+from django.http import HttpResponse
 
 import json
 
@@ -72,3 +74,17 @@ def product_result(request):
 
 def index(request):
     return render(request, 'index.html')
+
+def fetch_product_features(request):
+    if request.is_ajax():
+        q = request.GET.get('product_name', '')
+        field = request.GET.get('field', '')
+
+        selected_product = ProductFeature.objects.filter(name = q)[0]
+        attribute_values = getattr(selected_product, field)
+        result = {field: attribute_values}
+        data = json.dumps(result)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
