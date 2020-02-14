@@ -1,7 +1,23 @@
 .signup-section-oktav {
     border-radius: 25px;
-    padding: 10px;
-    background-color: rgba(255,255,255,0.4);
-    background-position: center;
-    background-size: cover;
+    background-color: rgba(255,255,255,0.5);
+    position: absolute;
+    left: 5%;
+    top: 100px;
+    width: fit-content;
+}
+
+.oktav-dropdown {
+    font-size: 18px;
+    font-family: 'Varela Round';
+    font-weight: 100;
+}
+
+.oktav-dropdown.periods {
+    margin-right: 30px;
+}
+
+.oktav-dropdown.checkbox {
+    font-size: 18px;
+    font-weight: 1000;
 }

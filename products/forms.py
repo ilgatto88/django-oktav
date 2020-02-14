@@ -5,7 +5,7 @@ from crispy_forms.bootstrap import FormActions, StrictButton
 
 class NewProductRequestForm(forms.Form):
     # Choices
-    PRODUCT_TYPE_CHOICES = (('product1', 'Product #1'), ('product2', 'Product #2'))
+    PRODUCT_TYPE_CHOICES = (('product1', 'Very loooooooong product name'), ('product2', 'Product #2'))
     PARAMETER_CHOICES = (('parameter1', 'Parameter #1'), ('parameter2', 'Parameter #2'))
     AGGRETATION_PERIOD_CHOICES = (('YS', 'Yearly'), ('QS-DEC', 'Seasonal'))
     SEASON_CHOICES = (('DJF', 'Winter'), ('MAM', 'Spring'), ('JJA', 'Summer'), ('SON', 'Autumn'))
@@ -24,13 +24,13 @@ class NewProductRequestForm(forms.Form):
     region_option = forms.ChoiceField(label='Region option', choices=REGION_OPTION_CHOICES)
     region = forms.CharField(label='Region(s)', max_length=1000, required=False, disabled=True)
 
-    period_start = forms.IntegerField(label='Period start', initial=2021)
-    period_end = forms.IntegerField(label='Period end', initial=2050)
-    reference_period_checkbox = forms.BooleanField(label="", required=False, initial=True)
-    reference_period_start = forms.IntegerField(label='Reference period', initial=1971, required=False)
-    reference_period_end = forms.IntegerField(label='', initial=2000, required=False)
-    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False)
-    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False)
+    period_start = forms.IntegerField(label='Period', initial=2021, min_value=1961, max_value=2099)
+    period_end = forms.IntegerField(label='.', initial=2050, min_value=1962, max_value=2100)
+    reference_period_checkbox = forms.BooleanField(label='Reference period', required=False, initial=True)
+    reference_period_start = forms.IntegerField(label='.', initial=1971, required=False, min_value=1961, max_value=1981)
+    reference_period_end = forms.IntegerField(label='.', initial=2000, required=False, min_value=1990, max_value=2010)
+    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False, min_value=0, max_value=10000)
+    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False, min_value=0, max_value=10000)
 
     output_path = forms.CharField(label='Output path', initial=BASE_OUTPUT_PATH)
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
@@ -39,8 +39,8 @@ class NewProductRequestForm(forms.Form):
     COLORBAR_CHOICES = (('alfa', 'alfa'), ('bravo', 'bravo'))
     ## Colorscale
     colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
-    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, max_digits=9, decimal_places=1, required=False)
-    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, max_digits=9, decimal_places=1, required=False)
+    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
+    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
     colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
     colorscale_colorbar_dict_extra = forms.CharField(label="Colorbar", max_length=200, required = False, initial='NA')
 

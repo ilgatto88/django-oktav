@@ -77,14 +77,10 @@
     </div>
   </nav>
 
-  <!-- Header -->
-  {% block index_content %}
+  {% block content %}
   {% endblock %}
 
-  {% block product_content %}
-  {% endblock %}
-
-  <!-- Contact Section -->
+<!-- Contact Section -->
   <section id="contact-section" class="contact-section bg-black">
     <div class="container">
       <div class="row">
@@ -134,8 +130,8 @@
 
   <!-- Footer -->
   <footer class="bg-black small text-center text-white-50">
-    <div class="d-flex justify-content-center mb-1">
-      <a href="https://www.zamg.ac.at/">
+    <div class="footer d-flex justify-content-center mb-1">
+      <a href="https://www.zamg.ac.at/" target="_blank">
         <img src="{% static "img/rsz_zamg_rgb_bm.png" %}" alt="">
       </a>
     </div>

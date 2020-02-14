@@ -2,51 +2,222 @@
 
 {% load static %}
 
-{% block product_content %}
+{% load widget_tweaks %}
+
+{% block content %}
   <header class="masthead">
-    <div class="container d-flex h-100 align-items-center">
-      <div class="mx-auto text-left">
-        <section class="signup-section-oktav">
-          <div class="row">
-            <div class="col-md-10 col-lg-8 mx-auto text-center">
+    <div class="container d-inline-flex col-lg-8">
+      <section class="signup-section-oktav">
+        <form method="post" autocomplete="off">
+          {% csrf_token %}
 
-              <form method="post" class="form-inline d-flex" autocomplete="off">
-                {% csrf_token %}
+          <div class="container justify-content-center">
+            <h2 class="text-black text-nowrap mt-4" style="font-weight:700;">Create a product request</h2>
+            <hr class="mt-0" style="background-color:black;">
+          </div>
 
-                <div class="col-md-10 offset-md-1">
-                  <div class="container justify-content-center">
-                    <h2 class="text-white text-nowrap mb-1">Create a product request</h2>
-                    <hr style="background-color:white;">
-                  </div>
-                  <div class="form-row">
-                    <div class="col-lg-6 pb-3">
-                      <label for="id_product_type">Product type</label>
-                      {{ product_form.product_type }}
-                    </div>
-                    <div class="col-lg-6 pb-3">
-                      <label for="id_scenario">Scenario</label>
-                      {{ product_form.scenario }}
-                    </div>
-                    <div class="col-lg-6 pb-3">
-                      <label for="id_parameter">Parameter</label>
-                      {{ product_form.parameter }}
-                    </div>
-                    <div class="col-lg-6 pb-3">
-                      <label for="id_parameter2">2nd parameter</label>
-                      {{ product_form.parameter2 }}
-                    </div>
-                    <script>document.getElementById("id_parameter2").style.display = "none";</script>
-                  </div>
-
-                </div>
-                <!-- <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address..."> -->
-                <button type="submit" class="btn btn-primary mx-auto mt-2 mb-2">Start</button>
-              </form>
-
+          <div class="form-row justify-content-center">
+            <div class="form-col w-75">
+              <div class="form-group ml-4 mr-1">
+                <label for={{ product_form.product_type.id_for_label }}>{{ product_form.product_type.label }}</label>
+                {{ product_form.product_type|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-25">
+              <div class="form-group ml-1 mr-4">
+                <label for={{ product_form.scenario.id_for_label }}>{{ product_form.scenario.label }}</label>
+                {{ product_form.scenario|add_class:"oktav-dropdown form-control" }}
+              </div>
             </div>
           </div>
-        </section>
-      </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col w-50">
+              <div class="form-group ml-4 mr-2">
+                <label for={{ product_form.parameter.id_for_label }}>{{ product_form.parameter.label }}</label>
+                {{ product_form.parameter|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-50">
+              <div class="form-group mr-4">
+                <label for={{ product_form.parameter2.id_for_label }}>{{ product_form.parameter2.label }}</label>
+                {{ product_form.parameter2|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col w-50">
+              <div class="form-group ml-4 mr-2">
+                <label for={{ product_form.aggregation_period.id_for_label }}>{{ product_form.aggregation_period.label }}</label>
+                {{ product_form.aggregation_period|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-50">
+              <div class="form-group mr-4">
+                <label for={{ product_form.season.id_for_label }}>{{ product_form.season.label }}</label>
+                {{ product_form.season|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col w-50">
+              <div class="form-group ml-4 mr-2">
+                <label for={{ product_form.region_option.id_for_label }}>{{ product_form.region_option.label }}</label>
+                {{ product_form.region_option|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-50">
+              <div class="form-group mr-4">
+                <label for={{ product_form.region.id_for_label }}>{{ product_form.region.label }}</label>
+                {{ product_form.region|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col col-lg-2">
+              <div class="form-group">
+                <label class="text-nowrap" for={{ product_form.period_start.id_for_label }}>{{ product_form.period_start.label }}</label>
+                {{ product_form.period_start|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col col-lg-2">
+              <div class="form-group">
+                <label style="color:transparent;" for={{ product_form.period_end.id_for_label }}>{{ product_form.period_end.label }}</label>
+                {{ product_form.period_end|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col ml-4 col-lg-1">
+              <div class="form-group">
+                <label class="text-nowrap" for={{ product_form.reference_period_checkbox.id_for_label }}>{{ product_form.reference_period_checkbox.label }}</label>
+                {{ product_form.reference_period_checkbox|add_class:"oktav-dropdown checkbox form-control" }}
+              </div>
+            </div>
+            <div class="form-col col-lg-2">
+              <div class="form-group">
+                <label style="color:transparent;" for={{ product_form.reference_period_start.id_for_label }}>{{ product_form.reference_period_start.label }}</label>
+                {{ product_form.reference_period_start|add_class:"oktav-dropdown  form-control" }}
+              </div>
+            </div>
+            <div class="form-col col-lg-2">
+              <div class="form-group">
+                <label style="color:transparent;" for={{ product_form.reference_period_end.id_for_label }}>{{ product_form.reference_period_end.label }}</label>
+                {{ product_form.reference_period_end|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col">
+              <div class="form-group ml-4 mr-1">
+                <label for={{ product_form.lower_height_filter.id_for_label }}>{{ product_form.lower_height_filter.label }}</label>
+                {{ product_form.lower_height_filter|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group ml-1 mr-1 mt-3">
+              <label></label>
+                <p> < height (m) < </p>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group ml-1 mr-4">
+                <label for={{ product_form.upper_height_filter.id_for_label }}>{{ product_form.upper_height_filter.label }}</label>
+                {{ product_form.upper_height_filter|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col w-50">
+              <div class="form-group ml-4">
+                <label for={{ product_form.output_path.id_for_label }}>{{ product_form.output_path.label }}</label>
+                {{ product_form.output_path|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-50">
+              <div class="form-group ml-2 mr-4">
+                <label for={{ product_form.output_type.id_for_label }}>{{ product_form.output_type.label }}</label>
+                {{ product_form.output_type|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row mb-2">
+            <div class="col w-50 ml-4">
+              <div class="form-group">
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#CollapseVisSet" aria-expanded="false" aria-controls="CollapseVisSet">
+                  Settings
+                </button>
+              </div>
+            </div>
+            <div class="col w-50 mr-4">
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary" style="color:black;background-color:#369e94;">
+                  Send request
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="collapse" id="CollapseVisSet">
+            <div class="form-row">
+              <div class="form-group" style="display:none;">
+                <label for={{ product_form.colorscale_colorbar_dict_extra.id_for_label }}>{{ product_form.colorscale_colorbar_dict_extra.label }}</label>
+                {{ product_form.colorscale_colorbar_dict_extra }}
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col col-lg-6">
+                <div class="form-group ml-4 mr-4">
+                  <label for={{ product_form.colorscale_name_extra.id_for_label }}>{{ product_form.colorscale_name_extra.label }}</label>
+                  {{ product_form.colorscale_name_extra|add_class:"oktav-dropdown form-control" }}
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col col-lg-2 ml-4">
+                <div class="form-group">
+                  <label class="text-nowrap" for={{ product_form.colorscale_minval_extra.id_for_label }}>{{ product_form.colorscale_minval_extra.label }}</label>
+                  {{ product_form.colorscale_minval_extra|add_class:"oktav-dropdown form-control" }}
+                </div>
+              </div>
+              <div class="form-col col-lg-2">
+                <div class="form-group">
+                  <label for={{ product_form.colorscale_step_size_extra.id_for_label }}>{{ product_form.colorscale_step_size_extra.label }}</label>
+                  {{ product_form.colorscale_step_size_extra|add_class:"oktav-dropdown form-control" }}
+                </div>
+              </div>
+              <div class="form-col col-lg-1">
+                <div class="form-group">
+                  <label class="text-nowrap" for={{ product_form.colorscale_reverse_extra.id_for_label }}>{{ product_form.colorscale_reverse_extra.label }}</label>
+                  {{ product_form.colorscale_reverse_extra|add_class:"oktav-dropdown checkbox form-control" }}
+                </div>
+              </div>
+              <div class="form-col col-lg-1 ml-4">
+                <label></label>
+                <button class="btn btn-success btn-sm" type="button" id="colorbar_generate_button" value="colorbar_dict">
+                  Redraw
+                </button>
+              </div>
+            </div>
+            {% for field in product_form %}
+              {% if 'extra' in field.name and 'colorscale' not in field.name %}
+                <div class="form-row">
+                  <div class="form-col col-lg-6 ml-4">
+                    <div class="form-group mb-0">
+                      <label class="text-nowrap" for={{ field.id_for_label }}>{{ field.label }}</label>
+                        {{ field|add_class:"oktav-dropdown" }}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </form>
+      </section>
     </div>
   </header>
   <script src="{% static 'js/form_functions.js' %}"></script>
