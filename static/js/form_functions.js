@@ -5,7 +5,15 @@ window.onload = function(){
     document.getElementById("id_aggregation_period").onchange = enableSeasonField;
     document.getElementById("id_product_type").onchange = enableParameter2Field;
     document.getElementById("collapse_button").onclick = changeParagraphSizeOnCollapse;
+    document.getElementById("id_product_type").onchange = filterExtraSettings;
 };
+
+function filterExtraSettings() {
+    console.log("filtering");
+    // AJAX lekéri az összes lehetséges widgetet
+    // AJAX lekéri a kiválasztott product type widgetjeit
+    // getElementById-vel letiltani / engedélyezni a megfelelő widgeteket
+}
 
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
 function changeParagraphSizeOnCollapse() {
