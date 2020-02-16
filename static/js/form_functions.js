@@ -4,19 +4,18 @@ window.onload = function(){
     document.getElementById("id_region_option").onchange = enableRegionField;
     document.getElementById("id_aggregation_period").onchange = enableSeasonField;
     document.getElementById("id_product_type").onchange = enableParameter2Field;
-    document.getElementById("collapse_button").onclick = changeParagraphSizeOnCollapse;
-    document.getElementById("id_product_type").onchange = filterExtraSettings;
+    document.getElementById("collapse_button").onclick = collapseEvents;
 };
 
-function filterExtraSettings() {
-    console.log("filtering");
-    // AJAX lekéri az összes lehetséges widgetet
-    // AJAX lekéri a kiválasztott product type widgetjeit
-    // getElementById-vel letiltani / engedélyezni a megfelelő widgeteket
-}
+// AJAX lekéri az összes lehetséges widgetet
+// AJAX lekéri a kiválasztott product type widgetjeit
+// getElementById-vel letiltani / engedélyezni a megfelelő widgeteket for looppal
 
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
-function changeParagraphSizeOnCollapse() {
+function collapseEvents() {
+    // document.getElementById("id_rivers_extra").checked = true;
+    // document.getElementById("id_rivers_extra").style.display = 'none';
+    // console.log("filtering");
     empty_field = document.getElementById("empty-black-space");
 
     if (empty_field.style.height == "400px") {
@@ -28,12 +27,15 @@ function changeParagraphSizeOnCollapse() {
 
 // This function enables and disables the 2nd parameter drop-down menu based on the product name
 function enableParameter2Field() {
-    product_name = document.getElementById("id_product_type").value
-    parameter2_field = document.getElementById("id_parameter2")
+    product_name = document.getElementById("id_product_type").value;
+    parameter2_field = document.getElementById("parameter2_div");
+    console.log(parameter2_field);
     if (product_name == 'product2') {
-        parameter2_field.disabled = false;
+        console.log('should be visible')
+        parameter2_field.style.visibility = "visible";
     } else {
-        parameter2_field.disabled = true;
+        console.log('should be invisible')
+        parameter2_field.style.visibility = "hidden";
     }
 }
 
@@ -103,3 +105,51 @@ function createColorBarDict() {
         alert("Step size is zero!")
     }
 }
+
+// Autocompletes region field
+$(function() {
+    function split( val ) {
+      return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $("#id_region")
+      // don't navigate away from the field on tab when selecting an item
+      .on( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        source: function( request, response ) {
+          $.getJSON( "/api/get_regions/", {
+            term: extractLast( request.term )
+          }, response );
+        },
+        search: function() {
+          // custom minLength
+          var term = extractLast( this.value );
+          if ( term.length < 1 ) {
+            return false;
+          }
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+    });
+});

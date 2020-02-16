@@ -1,0 +1,114 @@
+              <script>
+              var product_checkboxes;
+                function getProductWidgets(callback) {
+                  $.ajax({
+                    url: "/api/get_product_features/",
+                    type: "GET",
+                    data: {
+                      product_name : document.getElementById("id_product_type").value,
+                      field: 'widgets'
+                    },
+                    success: function(item) {
+                      product_checkboxes = JSON.parse(item.widgets);
+                    }
+                  });
+                };
+
+
+                // var product_checkboxes = 'smooth_extra,hillshade_extra,rivers_extra'
+                function createExtraSettingsCheckboxes() {
+                  getProductWidgets(result => {
+                    var product_checkboxes = result.widgets;
+                  });
+                  console.log(product_checkboxes)
+                  /* 
+                  {% for field in product_form %}
+                    {% if 'extra' in field.name and 'colorscale' not in field.name %}
+                      var field_name_js = "{{ field.name }}";
+                      if (pc.includes(field_name_js)) {
+                        var newFormRowExtra = document.createElement("DIV");
+                        newFormRowExtra.classList.add("form-row");
+                        var newFormColExtra = document.createElement("DIV");
+                        newFormColExtra.classList.add("form-col");
+                        newFormColExtra.classList.add("col-lg-6");
+                        newFormColExtra.classList.add("ml-2")
+                        var newFormGroupExtra = document.createElement("DIV");
+                        newFormGroupExtra.classList.add("form-group");
+                        newFormGroupExtra.classList.add("mb-0")
+
+                        var checkbox_element = document.createElement("INPUT");
+                        var checkbox_element_name = "{{ field.name }}";
+                        var checkbox_element_label = "{{ field.label }}";
+                        var checkbox_element_id = "{{ field.id_for_label }}";
+
+                        checkbox_element.setAttribute("type", "checkbox");
+                        checkbox_element.setAttribute("id", checkbox_element_id);
+                        checkbox_element.classList.add("oktav-dropdown");
+
+                        var checkbox_label_element = document.createElement("LABEL");
+                        checkbox_label_element.setAttribute("for", checkbox_element_id);
+                        checkbox_label_element.classList.add("text-nowrap");
+                        checkbox_label_element.classList.add("ml-2");
+                        var checkbox_label_element_text = document.createTextNode(checkbox_element_label);
+                        checkbox_label_element.appendChild(checkbox_label_element_text);
+                        
+                        var extraSettingsDiv = document.getElementById("extra_settings");
+                        extraSettingsDiv.insertBefore(newFormRowExtra, null);
+                        newFormRowExtra.insertBefore(newFormColExtra, null);
+                        newFormColExtra.insertBefore(newFormGroupExtra, null);
+                        newFormGroupExtra.appendChild(checkbox_element);
+                        newFormGroupExtra.appendChild(checkbox_label_element);
+                      }
+                    {% endif %}
+                  {% endfor %}
+                  */
+                }
+                createExtraSettingsCheckboxes();
+                // document.getElementById("id_product_type").onclick = createExtraSettingsCheckboxes();
+              </script>
+
+
+
+
+// var product_checkboxes = 'smooth_extra,hillshade_extra,rivers_extra'
+                function createExtraSettingsCheckboxes(pc = getProductWidgets()) {
+                  {% for field in product_form %}
+                    {% if 'extra' in field.name and 'colorscale' not in field.name %}
+                      var field_name_js = "{{ field.name }}";
+                      if (pc.includes(field_name_js)) {
+                        var newFormRowExtra = document.createElement("DIV");
+                        newFormRowExtra.classList.add("form-row");
+                        var newFormColExtra = document.createElement("DIV");
+                        newFormColExtra.classList.add("form-col");
+                        newFormColExtra.classList.add("col-lg-6");
+                        newFormColExtra.classList.add("ml-2")
+                        var newFormGroupExtra = document.createElement("DIV");
+                        newFormGroupExtra.classList.add("form-group");
+                        newFormGroupExtra.classList.add("mb-0")
+
+                        var checkbox_element = document.createElement("INPUT");
+                        var checkbox_element_name = "{{ field.name }}";
+                        var checkbox_element_label = "{{ field.label }}";
+                        var checkbox_element_id = "{{ field.id_for_label }}";
+
+                        checkbox_element.setAttribute("type", "checkbox");
+                        checkbox_element.setAttribute("id", checkbox_element_id);
+                        checkbox_element.classList.add("oktav-dropdown");
+
+                        var checkbox_label_element = document.createElement("LABEL");
+                        checkbox_label_element.setAttribute("for", checkbox_element_id);
+                        checkbox_label_element.classList.add("text-nowrap");
+                        checkbox_label_element.classList.add("ml-2");
+                        var checkbox_label_element_text = document.createTextNode(checkbox_element_label);
+                        checkbox_label_element.appendChild(checkbox_label_element_text);
+                        
+                        var extraSettingsDiv = document.getElementById("extra_settings");
+                        extraSettingsDiv.insertBefore(newFormRowExtra, null);
+                        newFormRowExtra.insertBefore(newFormColExtra, null);
+                        newFormColExtra.insertBefore(newFormGroupExtra, null);
+                        newFormGroupExtra.appendChild(checkbox_element);
+                        newFormGroupExtra.appendChild(checkbox_label_element);
+                      }
+                    {% endif %}
+                  {% endfor %}
+                }

@@ -4,6 +4,8 @@
 
 {% load widget_tweaks %}
 
+{% load costum_filter %}
+
 {% block content %}
   <header class="masthead">
     <div class="container d-inline-flex col-lg-8">
@@ -38,10 +40,11 @@
                 {{ product_form.parameter|add_class:"oktav-dropdown form-control" }}
               </div>
             </div>
-            <div class="form-col w-50">
+            <div class="form-col w-50" id="parameter2_div">
               <div class="form-group mr-4">
                 <label for={{ product_form.parameter2.id_for_label }}>{{ product_form.parameter2.label }}</label>
                 {{ product_form.parameter2|add_class:"oktav-dropdown form-control" }}
+                <script>document.getElementById("parameter2_div").style.visibility = "hidden";</script>
               </div>
             </div>
           </div>
@@ -203,18 +206,9 @@
                 </button>
               </div>
             </div>
-            {% for field in product_form %}
-              {% if 'extra' in field.name and 'colorscale' not in field.name %}
-                <div class="form-row">
-                  <div class="form-col col-lg-6 ml-4">
-                    <div class="form-group mb-0">
-                      {{ field|add_class:"oktav-dropdown" }}
-                      <label class="text-nowrap" for={{ field.id_for_label }}>{{ field.label }}</label>
-                    </div>
-                  </div>
-                </div>
-              {% endif %}
-            {% endfor %}
+            <div class="container" id="extra_settings">
+            <!-- scratch file -->
+            </div>
           </div>
         </form>
       </section>
@@ -222,5 +216,4 @@
   </header>
   <p class="empty-black-space" id="empty-black-space"></p>
   <script src="{% static 'js/form_functions.js' %}"></script>
-  <script src="{% static 'js/fetch_region.js' %}"></script>
 {% endblock %}

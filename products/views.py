@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
 from .oktav_parts_later_delete_this import ProductRequest
-from .models import ProductFeature
+from .models import ProductFeature, Widget
 from django.http import HttpResponse
 
 import json
@@ -67,7 +67,10 @@ def product_request(request):
             print('invalid')
     else:
         prf = NewProductRequestForm()
-        return render(request, 'products.html', {'product_form': prf})
+        #widgets = Widget.objects.all()
+        #widget_names = get_queryset_attribute_values(widgets, 'name')
+        #print(widget_names)
+        return render(request, 'products.html', {'product_form': prf}) #, 'widgets': widget_names
 
 def product_result(request):
     return render(request, 'product_result.html')
@@ -76,15 +79,36 @@ def index(request):
     return render(request, 'index.html')
 
 def fetch_product_features(request):
-    if request.is_ajax():
+    if True: #request.is_ajax():
         q = request.GET.get('product_name', '')
         field = request.GET.get('field', '')
 
         selected_product = ProductFeature.objects.filter(name = q)[0]
         attribute_values = getattr(selected_product, field)
+        widget_list = attribute_values.split(',')
+        print(widget_list)
+        widget_dict = {}
+        for w in widget_list:
+            print(w)
+            widget_object =  Widget.objects.filter(name = w)[0]
+            w_inner_dict = {}
+            w_inner_dict['name'] = widget_object.name
+            w_inner_dict['label'] = widget_object.label
+            widget_dict[w] = w_inner_dict
+
+        print(widget_dict)
+
+
         result = {field: attribute_values}
         data = json.dumps(result)
     else:
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+def get_queryset_attribute_values(qset, attr='name'):
+    qlist = []
+    for e in qset:
+        qlist.append(getattr(e, attr))
+
+    return ','.join([q for q in qlist])
