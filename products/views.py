@@ -86,20 +86,17 @@ def fetch_product_features(request):
         selected_product = ProductFeature.objects.filter(name = q)[0]
         attribute_values = getattr(selected_product, field)
         widget_list = attribute_values.split(',')
-        print(widget_list)
         widget_dict = {}
         for w in widget_list:
-            print(w)
             widget_object =  Widget.objects.filter(name = w)[0]
             w_inner_dict = {}
             w_inner_dict['name'] = widget_object.name
             w_inner_dict['label'] = widget_object.label
+            w_inner_dict['type'] = widget_object.widget_type
+            w_inner_dict['enabled'] = widget_object.enabled
             widget_dict[w] = w_inner_dict
 
-        print(widget_dict)
-
-
-        result = {field: attribute_values}
+        result = {field: widget_dict}
         data = json.dumps(result)
     else:
         data = 'fail'

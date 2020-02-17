@@ -7,6 +7,13 @@ window.onload = function(){
     document.getElementById("collapse_button").onclick = collapseEvents;
 };
 
+function generateExtraSettings() {
+    console.log(document.getElementById("collapse_button").getAttribute("aria-expanded"));
+    //  $("CollapseVisSet").on(show.bs.collapsed, function() { 
+    //     console.log("in condition")
+    // });
+}
+
 // AJAX lekéri az összes lehetséges widgetet
 // AJAX lekéri a kiválasztott product type widgetjeit
 // getElementById-vel letiltani / engedélyezni a megfelelő widgeteket for looppal
@@ -18,26 +25,103 @@ function collapseEvents() {
     // console.log("filtering");
     empty_field = document.getElementById("empty-black-space");
 
-    if (empty_field.style.height == "400px") {
+    if (empty_field.style.height == "200px") {
         empty_field.style.height = "0px";
     } else {
-        empty_field.style.height = "400px";
+        empty_field.style.height = "200px";
+    };
+
+    var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
+    if (field_collapsed == "false") {
+        var extra_settings_html = document.getElementById('extra_settings').innerHTML;
+        if (extra_settings_html.indexOf("form-row") !== -1) {
+            document.getElementById('extra_settings').innerHTML = "";
+            createExtraSettingsCheckboxes(
+                getProductWidgets()
+                );
+            } else {
+                createExtraSettingsCheckboxes(
+                    getProductWidgets()
+                    ); 
+            }
+        }      
     }
-}
 
 // This function enables and disables the 2nd parameter drop-down menu based on the product name
 function enableParameter2Field() {
     product_name = document.getElementById("id_product_type").value;
     parameter2_field = document.getElementById("parameter2_div");
-    console.log(parameter2_field);
     if (product_name == 'product2') {
-        console.log('should be visible')
         parameter2_field.style.visibility = "visible";
     } else {
-        console.log('should be invisible')
         parameter2_field.style.visibility = "hidden";
+    };
+
+    var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
+
+    if (field_collapsed == "true") {
+        document.getElementById('extra_settings').innerHTML = "";
+        createExtraSettingsCheckboxes(
+            getProductWidgets()
+            );
+    } else {
+        document.getElementById('extra_settings').innerHTML = "";
     }
 }
+
+function getProductWidgets(callback) {
+    var widgets_call_result = $.ajax({
+      url: "/api/get_product_features/",
+      type: "GET",
+      async: false,
+      dataType: 'json',
+      data: {
+        product_name : document.getElementById("id_product_type").value,
+        field: 'widgets'
+      }
+    });
+    return widgets_call_result.responseText;
+  };
+
+  function createExtraSettingsCheckboxes(pc) {
+    var product_checkboxes = JSON.parse(pc)['widgets'];
+    for (var key in product_checkboxes) {
+        if (product_checkboxes.hasOwnProperty(key)) {
+            var newFormRowExtra = document.createElement("DIV");
+            newFormRowExtra.classList.add("form-row");
+            var newFormColExtra = document.createElement("DIV");
+            newFormColExtra.classList.add("form-col");
+            newFormColExtra.classList.add("col-lg-6");
+            newFormColExtra.classList.add("ml-2")
+            var newFormGroupExtra = document.createElement("DIV");
+            newFormGroupExtra.classList.add("form-group");
+            newFormGroupExtra.classList.add("mb-0")
+
+            var checkbox_element = document.createElement("INPUT");
+            var checkbox_element_name = product_checkboxes[key]['name'];
+            var checkbox_element_label = product_checkboxes[key]['label'];
+            var checkbox_element_id = 'id_'.concat(product_checkboxes[key]['name']);
+
+            checkbox_element.setAttribute("type", "checkbox");
+            checkbox_element.setAttribute("id", checkbox_element_id);
+            checkbox_element.classList.add("oktav-dropdown");
+
+            var checkbox_label_element = document.createElement("LABEL");
+            checkbox_label_element.setAttribute("for", checkbox_element_id);
+            checkbox_label_element.classList.add("text-nowrap");
+            checkbox_label_element.classList.add("ml-2");
+            var checkbox_label_element_text = document.createTextNode(checkbox_element_label);
+            checkbox_label_element.appendChild(checkbox_label_element_text);
+            
+            var extraSettingsDiv = document.getElementById("extra_settings");
+            extraSettingsDiv.insertBefore(newFormRowExtra, null);
+            newFormRowExtra.insertBefore(newFormColExtra, null);
+            newFormColExtra.insertBefore(newFormGroupExtra, null);
+            newFormGroupExtra.appendChild(checkbox_element);
+            newFormGroupExtra.appendChild(checkbox_label_element);
+            }
+        }
+    }
 
 // This function enables and disables the season field based on the aggregation_period field
 function enableSeasonField() {

@@ -1,5 +1,5 @@
 __pycache__/
-*/migrations/*
+
 *.py[cod]
 launch.json
 settings.json
@@ -8,4 +8,5 @@ venv/
 .env
 *cpython*
 
-*.sqlite3
+#*/migrations/*
+#*.sqlite3
