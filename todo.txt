@@ -1,0 +1,11 @@
+- fix upper nav bar
+- create product result site
+- return image
+- add contact to product and result page
+- municipality vs bundesland in view
+- collapse field shouldn't delete checkbox selection
+- product type onchange should first make a full product feature ajax call, then adjust:
+-- scenario lock/unlock
+-- reference period lock/unlock
+-- output type
+-- colorscale as extra setting

@@ -3,7 +3,7 @@ window.onload = function(){
     document.getElementById("id_reference_period_checkbox").onchange = enableReferencePeriodFields;
     document.getElementById("id_region_option").onchange = enableRegionField;
     document.getElementById("id_aggregation_period").onchange = enableSeasonField;
-    document.getElementById("id_product_type").onchange = enableParameter2Field;
+    document.getElementById("id_product_type").onchange = productTypeSettings;
     document.getElementById("collapse_button").onclick = collapseEvents;
 };
 
@@ -47,9 +47,10 @@ function collapseEvents() {
         }      
     }
 
-// This function enables and disables the 2nd parameter drop-down menu based on the product name
-function enableParameter2Field() {
-    product_name = document.getElementById("id_product_type").value;
+// This function adjust selectable settings in form based on the product name
+function productTypeSettings() {
+    // 2nd parameter field
+    var product_name = document.getElementById("id_product_type").value;
     parameter2_field = document.getElementById("parameter2_div");
     if (product_name == 'product2') {
         parameter2_field.style.visibility = "visible";
@@ -57,8 +58,8 @@ function enableParameter2Field() {
         parameter2_field.style.visibility = "hidden";
     };
 
+    // extra settings in collapsable area
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
-
     if (field_collapsed == "true") {
         document.getElementById('extra_settings').innerHTML = "";
         createExtraSettingsCheckboxes(
@@ -66,8 +67,8 @@ function enableParameter2Field() {
             );
     } else {
         document.getElementById('extra_settings').innerHTML = "";
-    }
-}
+    };
+};
 
 function getProductWidgets(callback) {
     var widgets_call_result = $.ajax({
@@ -83,7 +84,7 @@ function getProductWidgets(callback) {
     return widgets_call_result.responseText;
   };
 
-  function createExtraSettingsCheckboxes(pc) {
+function createExtraSettingsCheckboxes(pc) {
     var product_checkboxes = JSON.parse(pc)['widgets'];
     for (var key in product_checkboxes) {
         if (product_checkboxes.hasOwnProperty(key)) {
@@ -121,7 +122,7 @@ function getProductWidgets(callback) {
             newFormGroupExtra.appendChild(checkbox_label_element);
             }
         }
-    }
+    };
 
 // This function enables and disables the season field based on the aggregation_period field
 function enableSeasonField() {
@@ -130,8 +131,8 @@ function enableSeasonField() {
         document.getElementById("id_season").disabled = true;
     } else {
         document.getElementById("id_season").disabled = false;
-    }
-}
+    };
+};
 
 // This function enables and disables the region field based on the region_option field
 function enableRegionField() {
@@ -140,8 +141,8 @@ function enableRegionField() {
         document.getElementById("id_region").disabled = true;
     } else {
         document.getElementById("id_region").disabled = false;
-    }
-}
+    };
+};
 
 // This function enables and disables the reference period fields based on the checkbox's state
 function enableReferencePeriodFields() {
@@ -152,8 +153,8 @@ function enableReferencePeriodFields() {
     } else {
         document.getElementById("id_reference_period_start").disabled = true;
         document.getElementById("id_reference_period_end").disabled = true;
-    }
-}
+    };
+};
 
 // This function creates a dictionary for the colorbar using the form fields of the document
 function createColorBarDict() {
@@ -187,8 +188,8 @@ function createColorBarDict() {
         document.getElementById("id_colorscale_colorbar_dict_extra").value = JSON.stringify(colorbar_dict);
     } else {
         alert("Step size is zero!")
-    }
-}
+    };
+};
 
 // Autocompletes region field
 $(function() {
