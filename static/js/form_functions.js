@@ -25,10 +25,10 @@ function collapseEvents() {
     // console.log("filtering");
     empty_field = document.getElementById("empty-black-space");
 
-    if (empty_field.style.height == "200px") {
+    if (empty_field.style.height == "300px") {
         empty_field.style.height = "0px";
     } else {
-        empty_field.style.height = "200px";
+        empty_field.style.height = "300px";
     };
 
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
