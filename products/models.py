@@ -6,6 +6,8 @@ class ProductFeature(models.Model):
     function = models.CharField(max_length=100)
     dataset = models.CharField(max_length=100)
     selectable_rcp = models.BooleanField()
+    has_second_parameter = models.BooleanField(default = False)
+    must_have_reference_period = models.BooleanField(default = False)
     output_types = models.CharField(max_length=100)
     widgets = models.CharField(max_length=100, default="")
     extra = models.CharField(max_length=200)

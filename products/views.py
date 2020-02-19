@@ -67,10 +67,7 @@ def product_request(request):
             print('invalid')
     else:
         prf = NewProductRequestForm()
-        #widgets = Widget.objects.all()
-        #widget_names = get_queryset_attribute_values(widgets, 'name')
-        #print(widget_names)
-        return render(request, 'products.html', {'product_form': prf}) #, 'widgets': widget_names
+        return render(request, 'products.html', {'product_form': prf})
 
 def product_result(request):
     return render(request, 'product_result.html')
@@ -82,26 +79,35 @@ def fetch_product_features(request):
     if True: #request.is_ajax():
         q = request.GET.get('product_name', '')
         field = request.GET.get('field', '')
-
         selected_product = ProductFeature.objects.filter(name = q)[0]
-        attribute_values = getattr(selected_product, field)
-        widget_list = attribute_values.split(',')
-        widget_dict = {}
-        for w in widget_list:
-            widget_object =  Widget.objects.filter(name = w)[0]
-            w_inner_dict = {}
-            w_inner_dict['name'] = widget_object.name
-            w_inner_dict['label'] = widget_object.label
-            w_inner_dict['type'] = widget_object.widget_type
-            w_inner_dict['enabled'] = widget_object.enabled
-            widget_dict[w] = w_inner_dict
+        attrs_to_remove = ['_state', 'id']
+        if field == 'all':
+            product_attributes = list(selected_product.__dict__.keys())
+            product_attributes = [ele for ele in product_attributes if ele not in attrs_to_remove]
+            product_feature_dict = {}
+            for attr in product_attributes:
+                product_feature_dict[attr] = getattr(selected_product, attr)
+            data = json.dumps(product_feature_dict)
+        elif field == 'widgets':
+            attribute_values = getattr(selected_product, field)
+            widget_list = attribute_values.split(',')
+            widget_dict = {}
+            for w in widget_list:
+                widget_object =  Widget.objects.filter(name = w)[0]
+                widget_attributes = list(widget_object.__dict__.keys())
+                widget_attributes = [ele for ele in widget_attributes if ele not in attrs_to_remove]
+                w_inner_dict = {}
+                for wattr in widget_attributes:
+                    w_inner_dict[wattr] = getattr(widget_object, wattr)
+                    widget_dict[w] = w_inner_dict
 
-        result = {field: widget_dict}
-        data = json.dumps(result)
+            result = {field: widget_dict}
+            data = json.dumps(result)
     else:
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
 
 def get_queryset_attribute_values(qset, attr='name'):
     qlist = []

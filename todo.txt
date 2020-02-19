@@ -1,10 +1,14 @@
 - fix upper nav bar
-x create product result site
+D create product result site
 - return image
+- link collection
+- documentation django addon
+- model + views fix
 - add contact to product and result page
 - municipality vs bundesland in view
 - collapse field shouldn't delete checkbox selection
-- product type onchange should first make a full product feature ajax call, then adjust:
+D product type onchange should first make a full product feature ajax call, then adjust:
+DD second parameter
 -- scenario lock/unlock
 -- reference period lock/unlock
 -- output type

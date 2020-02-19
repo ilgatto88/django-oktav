@@ -20,39 +20,36 @@ function generateExtraSettings() {
 
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
 function collapseEvents() {
-    // document.getElementById("id_rivers_extra").checked = true;
-    // document.getElementById("id_rivers_extra").style.display = 'none';
-    // console.log("filtering");
-    empty_field = document.getElementById("empty-black-space");
 
+    // here we add some more space below extra settings
+    empty_field = document.getElementById("empty-black-space");
     if (empty_field.style.height == "300px") {
         empty_field.style.height = "0px";
     } else {
         empty_field.style.height = "300px";
     };
 
+    // here we add the extra buttons
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
     if (field_collapsed == "false") {
         var extra_settings_html = document.getElementById('extra_settings').innerHTML;
         if (extra_settings_html.indexOf("form-row") !== -1) {
             document.getElementById('extra_settings').innerHTML = "";
-            createExtraSettingsCheckboxes(
-                getProductWidgets()
-                );
-            } else {
-                createExtraSettingsCheckboxes(
-                    getProductWidgets()
-                    ); 
-            }
-        }      
-    }
+            };
+        createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
+        };      
+    };
 
 // This function adjust selectable settings in form based on the product name
 function productTypeSettings() {
+
+    // get product features
+    var productFeatures = getProductFeatures(field_name = 'all', set_async = false);
+    
     // 2nd parameter field
-    var product_name = document.getElementById("id_product_type").value;
-    parameter2_field = document.getElementById("parameter2_div");
-    if (product_name == 'product2') {
+    var second_param_field_enabled = JSON.parse(productFeatures)['has_second_parameter'];
+    var parameter2_field = document.getElementById("parameter2_div");
+    if (second_param_field_enabled == true) {
         parameter2_field.style.visibility = "visible";
     } else {
         parameter2_field.style.visibility = "hidden";
@@ -63,22 +60,22 @@ function productTypeSettings() {
     if (field_collapsed == "true") {
         document.getElementById('extra_settings').innerHTML = "";
         createExtraSettingsCheckboxes(
-            getProductWidgets()
+            getProductFeatures(field_name = 'widgets')
             );
     } else {
         document.getElementById('extra_settings').innerHTML = "";
     };
 };
 
-function getProductWidgets(callback) {
+function getProductFeatures(field_name, set_async = false, callback) {
     var widgets_call_result = $.ajax({
       url: "/api/get_product_features/",
       type: "GET",
-      async: false,
+      async: set_async,
       dataType: 'json',
       data: {
         product_name : document.getElementById("id_product_type").value,
-        field: 'widgets'
+        field: field_name
       }
     });
     return widgets_call_result.responseText;
