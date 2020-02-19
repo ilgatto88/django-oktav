@@ -11,5 +11,5 @@ D product type onchange should first make a full product feature ajax call, then
 DD second parameter
 DD scenario lock/unlock
 DD reference period lock/unlock
--- output type
+DD output type
 -- colorscale as extra setting
