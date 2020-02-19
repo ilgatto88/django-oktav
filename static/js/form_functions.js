@@ -45,15 +45,50 @@ function productTypeSettings() {
 
     // get product features
     var productFeatures = getProductFeatures(field_name = 'all', set_async = false);
-    
+    var parsed_productFeatures = JSON.parse(productFeatures);
+    // enable scenario field
+    var scenario_field = document.getElementById("id_scenario");
+    var scenario_enabled = parsed_productFeatures['selectable_rcp'];
+    if (scenario_enabled == true) {
+        scenario_field.disabled = false;
+    } else {
+        scenario_field.disabled = true;
+    };
+
     // 2nd parameter field
-    var second_param_field_enabled = JSON.parse(productFeatures)['has_second_parameter'];
+    var second_param_field_enabled = parsed_productFeatures['has_second_parameter'];
     var parameter2_field = document.getElementById("parameter2_div");
     if (second_param_field_enabled == true) {
         parameter2_field.style.visibility = "visible";
     } else {
         parameter2_field.style.visibility = "hidden";
     };
+
+    // lock reference perid checkbox
+    var product_must_have_reference_period = parsed_productFeatures['must_have_reference_period'];
+    var ref_per_checkbox = document.getElementById("id_reference_period_checkbox");
+    if (product_must_have_reference_period == true) {
+        ref_per_checkbox.checked = true;
+        ref_per_checkbox.disabled = true;
+    } else {
+        ref_per_checkbox.disabled = false;
+        ref_per_checkbox.checked = true;
+    }
+
+    // enable/disable output types
+    var output_type_field = document.getElementById("id_output_type");
+    var output_count = output_type_field.options.length;
+    var product_type_outputs = parsed_productFeatures['output_types'];
+    for (i = 0; i < output_count; i++) {
+        var mod_i = i.toString().concat(',');
+        console.log(mod_i);
+        if (product_type_outputs.includes(mod_i) == true) {
+            console.log(i);
+            output_type_field.options[i].enabled = true;
+        } else {
+            output_type_field.options[i].enabled = false;
+        };
+      };
 
     // extra settings in collapsable area
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");

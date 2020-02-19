@@ -2,14 +2,14 @@
 D create product result site
 - return image
 - link collection
-- documentation django addon
+- documentation django addon (mkdocs)
 - model + views fix
-- add contact to product and result page
+D add contact to product and result page
 - municipality vs bundesland in view
 - collapse field shouldn't delete checkbox selection
 D product type onchange should first make a full product feature ajax call, then adjust:
 DD second parameter
--- scenario lock/unlock
--- reference period lock/unlock
+DD scenario lock/unlock
+DD reference period lock/unlock
 -- output type
 -- colorscale as extra setting

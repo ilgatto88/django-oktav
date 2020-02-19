@@ -76,7 +76,7 @@ def index(request):
     return render(request, 'index.html')
 
 def fetch_product_features(request):
-    if True: #request.is_ajax():
+    if request.is_ajax():
         q = request.GET.get('product_name', '')
         field = request.GET.get('field', '')
         selected_product = ProductFeature.objects.filter(name = q)[0]
