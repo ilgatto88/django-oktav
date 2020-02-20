@@ -10,7 +10,7 @@ class NewProductRequestForm(forms.Form):
     AGGRETATION_PERIOD_CHOICES = (('YS', 'Yearly'), ('QS-DEC', 'Seasonal'))
     SEASON_CHOICES = (('DJF', 'Winter'), ('MAM', 'Spring'), ('JJA', 'Summer'), ('SON', 'Autumn'))
     SCENARIO_CHOICES = (('rcp26', 'RCP2.6'), ('rcp45', 'RCP4.5'), ('rcp85', 'RCP8.5'))
-    REGION_OPTION_CHOICES = (('austria', 'Austria'), ('bundesland', 'Bundesland'), ('gemeinde', 'Municipality'))
+    REGION_OPTION_CHOICES = (('austria', 'Austria'), ('bundesland', 'Bundesland'), ('municipality', 'Municipality'))
     OUTPUT_TYPE_CHOICES = (('pdf', 'PDF'), ('png', 'PNG'), ('txt', 'TXT'), ('nc', 'NC'))
     BASE_OUTPUT_PATH = '/home/jtordai/Desktop/'
 

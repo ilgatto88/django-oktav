@@ -168,7 +168,7 @@ function createExtraSettingsCheckboxes(pc) {
 
 // This function enables and disables the season field based on the aggregation_period field
 function enableSeasonField() {
-    aggregation_period_value = document.getElementById("id_aggregation_period").value;
+    var aggregation_period_value = document.getElementById("id_aggregation_period").value;
     if (aggregation_period_value == 'YS') {
         document.getElementById("id_season").disabled = true;
     } else {
@@ -253,7 +253,8 @@ $(function() {
       .autocomplete({
         source: function( request, response ) {
           $.getJSON( "/api/get_regions/", {
-            term: extractLast( request.term )
+            term: extractLast( request.term),
+            type: document.getElementById("id_region_option").value
           }, response );
         },
         search: function() {
