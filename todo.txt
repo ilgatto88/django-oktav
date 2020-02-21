@@ -1,7 +1,7 @@
 - fix upper nav bar
 D create product result site
 - return image
-- link collection
+D link collection
 - documentation django addon (mkdocs)
 - model + views fix
 D add contact to product and result page
