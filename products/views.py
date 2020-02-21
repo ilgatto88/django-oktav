@@ -115,3 +115,6 @@ def get_queryset_attribute_values(qset, attr='name'):
         qlist.append(getattr(e, attr))
 
     return ','.join([q for q in qlist])
+
+def documentation(request):
+    return render(request, '_build/html/index.html')

@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^products', products_view.product_request, name = 'products'),
     url(r'^result', products_view.product_result, name = 'product_result'),
     url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions'),
-    url(r'^api/get_product_features/', products_view.fetch_product_features, name = 'get_product_features')
+    url(r'^api/get_product_features/', products_view.fetch_product_features, name = 'get_product_features'),
+    url(r'^docs/', products_view.documentation, name = 'documentation')
 ]
