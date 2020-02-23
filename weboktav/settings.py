@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'region',
     'crispy_forms',
     'bootstrap4',
-    'widget_tweaks'
+    'widget_tweaks',
+    'docs'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -136,3 +138,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
+MKDOCS_CONFIG = os.path.join(BASE_DIR, 'mkdocs.yml')
+DOCS_DIR = ''
+DOCS_STATIC_NAMESPACE = ''
+with open(MKDOCS_CONFIG, 'r') as f:
+    DOCS_DIR = yaml.load(f, Loader=yaml.Loader)['site_dir']
+    DOCS_STATIC_NAMESPACE = os.path.basename(DOCS_DIR)
