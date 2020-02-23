@@ -6,7 +6,7 @@ D documentation django addon (mkdocs)
 - model + views fix
 D add contact to product and result page
 D municipality vs bundesland in view
-- collapse field shouldn't delete checkbox selection
+D collapse field shouldn't delete checkbox selection
 D product type onchange should first make a full product feature ajax call, then adjust:
 DD second parameter
 DD scenario lock/unlock

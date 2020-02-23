@@ -108,7 +108,6 @@ def fetch_product_features(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
-
 def get_queryset_attribute_values(qset, attr='name'):
     qlist = []
     for e in qset:
@@ -118,3 +117,8 @@ def get_queryset_attribute_values(qset, attr='name'):
 
 def documentation(request):
     return render(request, '_build/html/index.html')
+
+def colorbar_figure(request):
+    fig = plt.figure(figsize=(width, height))
+    https://anaconda.org/conda-forge/mpld3
+    https://stackoverflow.com/questions/49015957/how-to-get-python-graph-output-into-html-webpage-directly

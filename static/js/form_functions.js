@@ -7,17 +7,6 @@ window.onload = function(){
     document.getElementById("collapse_button").onclick = collapseEvents;
 };
 
-function generateExtraSettings() {
-    console.log(document.getElementById("collapse_button").getAttribute("aria-expanded"));
-    //  $("CollapseVisSet").on(show.bs.collapsed, function() { 
-    //     console.log("in condition")
-    // });
-}
-
-// AJAX lekéri az összes lehetséges widgetet
-// AJAX lekéri a kiválasztott product type widgetjeit
-// getElementById-vel letiltani / engedélyezni a megfelelő widgeteket for looppal
-
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
 function collapseEvents() {
 
@@ -32,23 +21,11 @@ function collapseEvents() {
     // here we add the extra buttons
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
     if (field_collapsed == "false") {
-        console.log('not collapsed');
         var extra_settings_html = document.getElementById('extra_settings').innerHTML;
-        if (extra_settings_html.indexOf("form-row") !== -1) {
-            console.log('html not empty');
-            console.log(extra_settings_html);
-            // itt kellene begyűjteni hogy mi volt bekattintva és azokat ujra bekattintani
-            // document.getElementById('extra_settings').innerHTML = "";
-            document.getElementById('extra_settings').innerHTML = extra_settings_html;
-            // createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
-            } else {
-                console.log('html empty');
-                createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
-            }
-        // createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
-        } else {
-            console.log('collapsed');
-        }     
+        if (extra_settings_html.indexOf("form-row") == -1) {
+            createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
+            };
+        };
     };
 
 // This function adjust selectable settings in form based on the product name
@@ -226,7 +203,7 @@ function createColorBarDict() {
             'reverse': reverse
         }
 
-        // console.log(return_value);
+        console.log(colorbar_dict);
         document.getElementById("id_colorscale_colorbar_dict_extra").value = JSON.stringify(colorbar_dict);
     } else {
         alert("Step size is zero!")
