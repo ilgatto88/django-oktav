@@ -29,3 +29,7 @@
     margin: 0;
     transition: all linear 0.3s;
 }
+
+.colorbar_table {
+    padding: 100px;
+}

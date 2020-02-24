@@ -1,0 +1,101 @@
+{
+    "alfa": {    
+            "name": "alfa",
+            "minval": -20.0,
+            "maxval": 35.0,
+            "step":   1,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: -20, base max: +35, base step: 1, (abs(min)+abs(max))/step should be 55, mainly for [°C] or [days]"
+            },
+    "bravo": {    
+            "name": "bravo",
+            "minval": -7.5,
+            "maxval": 8.0,
+            "step":   0.5,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: -7.5, base max: +8.0, base step: 0.5, (abs(min)+abs(max))/step should be 31, mainly for [°C] or [days]"
+            },
+    "charlie": {
+            "name": "charlie",
+            "minval": 0.0,
+            "maxval": 5.4,
+            "step":   0.2,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: 0.0, base max: +5.4, base step = 0.2, (abs(min)+abs(max))/step should be 27, mainly for [°C] or [days]"
+            },
+    "delta": {    
+            "name": "delta",
+            "minval": 0,
+            "maxval": 300,
+            "step":   "fixed",
+            "bins": [0,15,30,45,60,75,90,110,130,150,185,235,300],
+            "unit": "%",
+            "description": "base min: 0, base max: +300, base step = fixed color scale, mainly for [%]"
+            },
+    "echo": {    
+            "name": "echo",
+            "minval": -24,
+            "maxval": 24,
+            "step":   4,
+            "bins": "None",
+            "unit": "%",
+            "description": "base min: -24, base max: +24, base step = 4, (abs(min)+abs(max))/step should be 13, mainly for [%]"
+            },
+    "foxtrot": {        
+            "name": "foxtrot",
+            "minval": -10.0,
+            "maxval": 80.0,
+            "step":   5.0,
+            "bins": "None",
+            "unit": "days",
+            "description": "base min: -10, base max: +75, base step = 5, (abs(min)+abs(max))/step should be 17, mainly for [°C] or [days]"
+            },
+    "golf": {                                            
+            "name": "golf",
+            "minval": -14.0,
+            "maxval": 14.0,
+            "step":   2.0,
+            "bins": "None",
+            "unit": "days",
+            "description": "base min: -14, base max: +14, base step = 2, (abs(min)+abs(max))/step should be 14, mainly for [°C] or [days]"       
+    },
+    "hotel": {
+            "name": "hotel",
+            "minval": 0.0,
+            "maxval": 9000.0,
+            "step": 1000.0,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: 1000, base max: 10000, base step = 1000, (abs(min)+abs(max))/step should be 9, mainly for [°C] (heating degree days)"        
+    },
+    "india": {
+            "name": "india",
+            "minval": -3.5,
+            "maxval": 3.5,
+            "step":    "fixed",
+            "bins": [-3.5, -3, -2.5, -2, -1.5, -1, 1, 1.5, 2, 2.5, 3, 3.5],
+            "unit": "#",
+            "description": "base min: -3, base max: 3, base step = 0.5, (abs(min)+abs(max))/step should be 9, mainly for SPEI"  
+    },
+    "juliett": {
+            "name": "juliett",
+            "minval": -13,
+            "maxval": 13,
+            "step":    2,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: -13, base max: 13, base step = 2, (abs(min)+abs(max))/step should be 9, mainly for [°C] and [days]"    
+    },
+    "kilo": {
+            "name": "kilo",
+            "minval": -32,
+            "maxval": 40,
+            "step":    2,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: -32, base max: 40, base step = 2, (abs(min)+abs(max))/step should be 38, mainly for [°C]"    
+    }                                
+}

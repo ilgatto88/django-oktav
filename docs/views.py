@@ -8,4 +8,4 @@ def serve_docs(request, path):
         path = os.path.join(path, 'index.html')
         
     path = os.path.join(settings.DOCS_STATIC_NAMESPACE, path)
-    return serve(request, path)
+    return serve(request, path, insecure=True)

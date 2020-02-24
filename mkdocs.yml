@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: OKTAV Documentation
 docs_dir: 'mkdocs'
 site_dir: 'docs/static/mkdocs_build'
 pages:

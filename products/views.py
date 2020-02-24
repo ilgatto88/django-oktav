@@ -115,10 +115,17 @@ def get_queryset_attribute_values(qset, attr='name'):
 
     return ','.join([q for q in qlist])
 
+def get_static_file(request):
+    if True: #request.is_ajax():
+        rfile = request.GET.get('file', '')
+        with open(rfile) as json_file:
+            data = json.load(json_file)
+        
+        res = json.dumps(data)
+    else:
+        res = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(res, mimetype)
+
 def documentation(request):
     return render(request, '_build/html/index.html')
-
-def colorbar_figure(request):
-    fig = plt.figure(figsize=(width, height))
-    https://anaconda.org/conda-forge/mpld3
-    https://stackoverflow.com/questions/49015957/how-to-get-python-graph-output-into-html-webpage-directly

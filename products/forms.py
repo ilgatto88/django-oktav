@@ -36,7 +36,7 @@ class NewProductRequestForm(forms.Form):
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
 
     # Extra product settings
-    COLORBAR_CHOICES = (('alfa', 'alfa'), ('bravo', 'bravo'))
+    COLORBAR_CHOICES = (('alfa', 'alfa'), ('bravo', 'bravo'), ('charlie', 'charlie'), ('delta', 'delta'))
     ## Colorscale
     colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
     colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
