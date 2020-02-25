@@ -12,4 +12,4 @@ DD second parameter
 DD scenario lock/unlock
 DD reference period lock/unlock
 DD output type
--- colorscale as extra setting
+DD colorscale as extra setting

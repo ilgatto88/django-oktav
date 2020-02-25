@@ -10,17 +10,18 @@ window.onload = function(){
 };
 
 function reDrawColorBar() {
-    if (document.getElementById("colorbar_table").innerHTML.indexOf("table") != -1) {
-        document.getElementById("colorbar_table").innerHTML = "";
+    if (document.getElementById("colorbar_colors").innerHTML.indexOf("table") != -1) {
+        document.getElementById("colorbar_colors").innerHTML = "";
     };
-    createColorScaleTable( create_html_colordict(redraw=true) );
+    createColorScaleDiv( create_html_colordict(redraw=true) );
 }
 
 function changeColorscale() {
-    if (document.getElementById("colorbar_table").innerHTML.indexOf("table") != -1) {
-        document.getElementById("colorbar_table").innerHTML = "";
+    document.getElementById("id_colorscale_reverse_extra").checked = false;
+    if (document.getElementById("colorbar_colors").innerHTML.indexOf("table") != -1) {
+        document.getElementById("colorbar_colors").innerHTML = "";
     };
-    createColorScaleTable( create_html_colordict() );
+    createColorScaleDiv( create_html_colordict() );
 };
 
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
@@ -41,9 +42,9 @@ function collapseEvents() {
         if (extra_settings_html.indexOf("form-row") == -1) {
             createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
             };
-        var colorbar_inner_html = document.getElementById('colorbar_table').innerHTML;
+        var colorbar_inner_html = document.getElementById('colorbar_colors').innerHTML;
         if (colorbar_inner_html.indexOf("table") == -1) {
-            createColorScaleTable( create_html_colordict() );
+            createColorScaleDiv( create_html_colordict() );
             };
         };
     };
@@ -57,14 +58,14 @@ function create_html_colordict(redraw=false) {
     var selected_colorscale_features = colorscales[selected_colorscale];
     var selected_colors = colors[selected_colorscale];
 
+    var colorbar_reversed = false;
     if (redraw == true) {
         if (document.getElementById("id_colorscale_reverse_extra").checked == true) {
-            var selected_colors = selected_colors.reverse()
+            var selected_colors = selected_colors.reverse();
+            colorbar_reversed = true; 
         };
         var minval = parseFloat(document.getElementById("id_colorscale_minval_extra").value);
-        console.log(minval);
         var step = parseFloat(document.getElementById("id_colorscale_step_size_extra").value);
-        console.log(step);
         value_array = []
         for (var i = 0; i < selected_colors.length; i++) {
             val = (minval + (i*step)).toFixed(1);
@@ -72,9 +73,7 @@ function create_html_colordict(redraw=false) {
         };
     } else {
         var minval = selected_colorscale_features["minval"];
-        console.log(minval);
         var step = selected_colorscale_features["step"];
-        console.log(step);
         document.getElementById("id_colorscale_minval_extra").value = minval;
         if (step != 'fixed') {
             document.getElementById("id_colorscale_step_size_extra").value = step;
@@ -92,10 +91,11 @@ function create_html_colordict(redraw=false) {
         };
     };
 
-    console.log(value_array);
     var colordict = {
         colors: colors[selected_colorscale],
-        values: value_array
+        values: value_array,
+        step: step,
+        reversed: colorbar_reversed
     };
     return colordict;
 };
@@ -188,15 +188,32 @@ function getProductFeatures(field_name, set_async = false, callback) {
     return widgets_call_result.responseText;
   };
 
-function createColorScaleTable(colordict) {
-    var colorBarDiv = document.getElementById("colorbar_table");
+function createColorScaleDiv(colordict) {
+    /*
+    function checkDigit(val) {
+        return val % 1 != 0;
+    };
+
+    if (colordict['values'].some(checkDigit) == false) {
+        var values_string = (colordict['values'].join(', ')).replace(/\.0/g, '');
+    } else {
+        var values_string = colordict['values'].join(', ')
+    }
+
+    var colors_string = colordict['colors'].join(',');
+    var colorBarDiv = document.getElementById("colorbar_colors");
+    colorBarDiv.style.background = 'linear-gradient(to right, ' + colors_string + ')'
+    colorBarDiv.style.border = '1px solid black';
+    colorBarDiv.title = 'Values: ' + values_string;
+    */
+
+    var numeric_values = colordict['values'].map(Number);
+    var colorBarDiv = document.getElementById("colorbar_colors");
     var newTable = document.createElement("TABLE");
     newTable.classList.add("table");
-    newTable.classList.add("colorbar_table");
+    newTable.classList.add("colorbar_colors");
     colorBarDiv.insertBefore(newTable, null)
     var tableRowColor = newTable.insertRow(0);
-    var tableRowValue = newTable.insertRow(1);
-
     var colors = colordict['colors'];
     var colorCount = colors.length;
     var td_width = (1/colorCount).toString().concat('%')
@@ -205,18 +222,17 @@ function createColorScaleTable(colordict) {
         var newTableDataColor = tableRowColor.insertCell(i);
         newTableDataColor.style.backgroundColor = colors[i];
         newTableDataColor.style.width = td_width;
-        newTableDataColor.style.height = '30px';
+        newTableDataColor.style.height = '70px';
         newTableDataColor.style.padding = '0';
-
-        var newTableDataValue = tableRowValue.insertCell(i);
-        newTableDataValue.style.width = td_width;
-        newTableDataValue.style.height = '10px';
-        newTableDataValue.style.fontSize = '70%';
-        newTableDataValue.style.padding = '0';
-        if ((colorCount <= 10) || (colorCount > 10 && colorCount <= 30 && i%3 === 0) || (colorCount > 30 && i%5 === 0)) {
-            newTableDataValue.innerHTML = colordict['values'][i].toString();
-        };
+        newTableDataColor.title = colordict['values'][i].toString();
     };
+
+    var colorBarDivInfo = document.getElementById("colorbar_values");
+    colorBarDivInfo.innerHTML = 'Actual min: ' + Math.min.apply(Math, numeric_values)
+        + ', max: ' + Math.max.apply(Math, numeric_values) + ', step: ' + colordict['step']
+        + ', reversed: ' + colordict['reversed']
+        colorBarDivInfo.style.color = 'white';
+    
 };
 
 function createExtraSettingsCheckboxes(pc) {

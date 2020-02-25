@@ -1,17 +1,44 @@
+import json
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Button, Fieldset, HTML, Div
 from crispy_forms.bootstrap import FormActions, StrictButton
 
+from .models import ProductFeature, Parameter, AggregationPeriod, Season
+from .models import Scenario, RegionOption, OutputType
+
 class NewProductRequestForm(forms.Form):
+    # model requests
+    product_queryset = ProductFeature.objects.all()
+    parameter_queryset = Parameter.objects.all()
+    aggregation_period_queryset = AggregationPeriod.objects.all()
+    season_queryset = Season.objects.all()
+    scenario_queryset = Scenario.objects.all()
+    region_option_queryset = RegionOption.objects.all()
+    output_type_queryset = OutputType.objects.all()
+
     # Choices
-    PRODUCT_TYPE_CHOICES = (('product1', 'Very loooooooong product name'), ('product2', 'Product #2'))
-    PARAMETER_CHOICES = (('parameter1', 'Parameter #1'), ('parameter2', 'Parameter #2'))
-    AGGRETATION_PERIOD_CHOICES = (('YS', 'Yearly'), ('QS-DEC', 'Seasonal'))
-    SEASON_CHOICES = (('DJF', 'Winter'), ('MAM', 'Spring'), ('JJA', 'Summer'), ('SON', 'Autumn'))
-    SCENARIO_CHOICES = (('rcp26', 'RCP2.6'), ('rcp45', 'RCP4.5'), ('rcp85', 'RCP8.5'))
-    REGION_OPTION_CHOICES = (('austria', 'Austria'), ('bundesland', 'Bundesland'), ('municipality', 'Municipality'))
-    OUTPUT_TYPE_CHOICES = (('pdf', 'PDF'), ('png', 'PNG'), ('txt', 'TXT'), ('nc', 'NC'))
+    ptype_pname = [[p.name, p.print_name] for p in product_queryset]
+    PRODUCT_TYPE_CHOICES = [tuple(l) for l in ptype_pname]
+
+    parameters = [[p.name, p.print_name] for p in parameter_queryset]
+    PARAMETER_CHOICES = [tuple(l) for l in parameters]
+    
+    agg_periods = [[p.name, p.print_name] for p in aggregation_period_queryset]
+    AGGRETATION_PERIOD_CHOICES = [tuple(l) for l in agg_periods]
+
+    seasons = [[p.name, p.print_name] for p in season_queryset]
+    SEASON_CHOICES = [tuple(l) for l in seasons]
+    
+    scenarios = [[p.name, p.print_name] for p in scenario_queryset]
+    SCENARIO_CHOICES = [tuple(l) for l in scenarios]
+
+    region_options = [[p.name, p.print_name] for p in region_option_queryset]
+    REGION_OPTION_CHOICES = [tuple(l) for l in region_options]
+
+    output_types = [[p.name, p.print_name] for p in output_type_queryset]
+    OUTPUT_TYPE_CHOICES = [tuple(l) for l in output_types]
+    
     BASE_OUTPUT_PATH = '/home/jtordai/Desktop/'
 
     # Product settings
@@ -36,7 +63,13 @@ class NewProductRequestForm(forms.Form):
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
 
     # Extra product settings
-    COLORBAR_CHOICES = (('alfa', 'alfa'), ('bravo', 'bravo'), ('charlie', 'charlie'), ('delta', 'delta'))
+    with open('products/static/colorscales.json') as json_file:
+        data = json.load(json_file)
+
+    cb_list = list(data)
+    colorbars = [[p, p] for p in cb_list]
+    COLORBAR_CHOICES = [tuple(l) for l in colorbars]
+
     ## Colorscale
     colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
     colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
@@ -56,4 +89,3 @@ class NewProductRequestForm(forms.Form):
     boxplot_extra = forms.BooleanField(label="Boxplot", initial=False, required=False)
     title_extra = forms.BooleanField(label="Title", initial=False, required=False)
     secondary_y_axis_extra = forms.BooleanField(label="Secondary y-axis", initial=False, required=False)
-
