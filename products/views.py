@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
-from .oktav_parts_later_delete_this import ProductRequest
+from oktav.products.product_processing import ProductRequest
 from .models import ProductFeature, Widget
 from django.http import HttpResponse
 
@@ -79,7 +79,7 @@ def index(request):
     return render(request, 'index.html')
 
 def fetch_product_features(request):
-    if True: #request.is_ajax():
+    if request.is_ajax():
         q = request.GET.get('product_name', '')
         field = request.GET.get('field', '')
         selected_product = ProductFeature.objects.filter(name = q)[0]
@@ -93,20 +93,22 @@ def fetch_product_features(request):
             data = json.dumps(product_feature_dict)
         elif field == 'widgets':
             attribute_values = getattr(selected_product, field)
-            widget_list = attribute_values.split(',')
-            widget_dict = {}
-            for w in widget_list:
-                print(w)
-                widget_object =  Widget.objects.filter(name = w)[0]
-                widget_attributes = list(widget_object.__dict__.keys())
-                widget_attributes = [ele for ele in widget_attributes if ele not in attrs_to_remove]
-                w_inner_dict = {}
-                for wattr in widget_attributes:
-                    w_inner_dict[wattr] = getattr(widget_object, wattr)
-                    widget_dict[w] = w_inner_dict
+            if attribute_values != 'None':
+                widget_list = attribute_values.split(',')
+                widget_dict = {}
+                for w in widget_list:
+                    widget_object =  Widget.objects.filter(name = w)[0]
+                    widget_attributes = list(widget_object.__dict__.keys())
+                    widget_attributes = [ele for ele in widget_attributes if ele not in attrs_to_remove]
+                    w_inner_dict = {}
+                    for wattr in widget_attributes:
+                        w_inner_dict[wattr] = getattr(widget_object, wattr)
+                        widget_dict[w] = w_inner_dict
 
-            result = {field: widget_dict}
-            data = json.dumps(result)
+                result = {field: widget_dict}
+                data = json.dumps(result)
+            else:
+                data = json.dumps({"None": "None"})
     else:
         data = 'fail'
     mimetype = 'application/json'
@@ -120,7 +122,7 @@ def get_queryset_attribute_values(qset, attr='name'):
     return ','.join([q for q in qlist])
 
 def get_static_file(request):
-    if True: #request.is_ajax():
+    if request.is_ajax():
         rfile = request.GET.get('file', '')
         with open(rfile) as json_file:
             data = json.load(json_file)

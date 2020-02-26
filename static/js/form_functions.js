@@ -26,28 +26,33 @@ function changeColorscale() {
 
 // This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
 function collapseEvents() {
-
-    // here we add some more space below extra settings
-    empty_field = document.getElementById("empty-black-space");
-    if (empty_field.style.height == "400px") {
-        empty_field.style.height = "0px";
-    } else {
-        empty_field.style.height = "400px";
-    };
+    var product_widgets = getProductFeatures(field_name = 'widgets');
+    var product_widgets_str = JSON.stringify(product_widgets);
+    var parsed_product_widgets = JSON.parse(product_widgets);
+    var number_of_widgets = Object.keys(parsed_product_widgets['widgets']).length;
+    console.log(number_of_widgets);
 
     // here we add the extra buttons
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
     if (field_collapsed == "false") {
+        emptyFieldSize(number_of_widgets);
         var extra_settings_html = document.getElementById('extra_settings').innerHTML;
         if (extra_settings_html.indexOf("form-row") == -1) {
-            createExtraSettingsCheckboxes( getProductFeatures(field_name = 'widgets') );
+            if (product_widgets_str.includes("colorscale") == false) {
+                document.getElementById("color_related_fields").style.display = "none";
+            } else {
+                document.getElementById("color_related_fields").style.display = "block";
             };
+            createExtraSettingsCheckboxes( product_widgets );
+        };
         var colorbar_inner_html = document.getElementById('colorbar_colors').innerHTML;
         if (colorbar_inner_html.indexOf("table") == -1) {
             createColorScaleDiv( create_html_colordict() );
             };
-        };
+        } else {
+        emptyFieldSize(0);
     };
+};
 
 function create_html_colordict(redraw=false) {
 
@@ -95,7 +100,8 @@ function create_html_colordict(redraw=false) {
         colors: colors[selected_colorscale],
         values: value_array,
         step: step,
-        reversed: colorbar_reversed
+        reversed: colorbar_reversed,
+        unit: selected_colorscale_features["unit"]
     };
     return colordict;
 };
@@ -161,14 +167,23 @@ function productTypeSettings() {
         };
       };
 
+    var product_widgets = getProductFeatures(field_name = 'widgets');
+    var product_widgets_str = JSON.stringify(product_widgets);
+    
+    // show/hide color related fields
+    
+    if (product_widgets_str.includes("colorscale") == false) {
+        document.getElementById("color_related_fields").style.display = "none";
+    } else {
+        document.getElementById("color_related_fields").style.display = "block";
+    };
+
     // extra settings in collapsable area
     var extra_settings_field = document.getElementById('extra_settings');
     var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
     if (field_collapsed == "true") {
         extra_settings_field.innerHTML = "";
-        createExtraSettingsCheckboxes(
-            getProductFeatures(field_name = 'widgets')
-            );
+        createExtraSettingsCheckboxes(product_widgets);
     } else {
         extra_settings_field.innerHTML = "";
     };
@@ -189,23 +204,19 @@ function getProductFeatures(field_name, set_async = false, callback) {
   };
 
 function createColorScaleDiv(colordict) {
-    /*
     function checkDigit(val) {
-        return val % 1 != 0;
+        return parseFloat(val) % 1 != 0;
+    };
+
+    function replaceZero(x) {
+        return x.replace(/\.0/, "")
     };
 
     if (colordict['values'].some(checkDigit) == false) {
-        var values_string = (colordict['values'].join(', ')).replace(/\.0/g, '');
+        var values_string = colordict['values'].map(replaceZero);
     } else {
-        var values_string = colordict['values'].join(', ')
-    }
-
-    var colors_string = colordict['colors'].join(',');
-    var colorBarDiv = document.getElementById("colorbar_colors");
-    colorBarDiv.style.background = 'linear-gradient(to right, ' + colors_string + ')'
-    colorBarDiv.style.border = '1px solid black';
-    colorBarDiv.title = 'Values: ' + values_string;
-    */
+        var values_string = colordict['values'];
+    };
 
     var numeric_values = colordict['values'].map(Number);
     var colorBarDiv = document.getElementById("colorbar_colors");
@@ -224,7 +235,8 @@ function createColorScaleDiv(colordict) {
         newTableDataColor.style.width = td_width;
         newTableDataColor.style.height = '70px';
         newTableDataColor.style.padding = '0';
-        newTableDataColor.title = colordict['values'][i].toString();
+        newTableDataColor.title = values_string[i]
+            + ' — ' + values_string[i+1];
     };
 
     var colorBarDivInfo = document.getElementById("colorbar_values");
@@ -250,7 +262,7 @@ function createExtraSettingsCheckboxes(pc) {
             newFormGroupExtra.classList.add("mb-0")
 
             var checkbox_element = document.createElement("INPUT");
-            var checkbox_element_name = product_checkboxes[key]['name'];
+            //var checkbox_element_name = product_checkboxes[key]['name'];
             var checkbox_element_label = product_checkboxes[key]['label'];
             var checkbox_element_id = 'id_'.concat(product_checkboxes[key]['name']);
 
@@ -274,6 +286,23 @@ function createExtraSettingsCheckboxes(pc) {
             }
         }
     };
+/*
+function createColorRelatedFields() {
+    var FormRowColDict = document.createElement("DIV");
+    FormRowColDict.classList.add("form-row");
+    var FormGroupColDict = document.createElement("DIV");
+    FormGroupColDict.classList.add("form-group");
+    FormGroupColDict.style.display = "none";
+
+
+
+    var colorFieldsDiv = document.getElementById("color_related_fields");
+    colorFieldsDiv.insertBefore(FormRowColDict, null);
+    FormRowColDict.insertBefore(FormGroupColDict, null);
+
+}
+*/
+
 
 // This function enables and disables the season field based on the aggregation_period field
 function enableSeasonField() {
@@ -288,6 +317,7 @@ function enableSeasonField() {
 // This function enables and disables the region field based on the region_option field
 function enableRegionField() {
     region_option_value = document.getElementById("id_region_option").value;
+    document.getElementById("id_region").value = "";
     if (region_option_value == 'austria') {
         document.getElementById("id_region").disabled = true;
     } else {
@@ -323,7 +353,7 @@ function createColorBarDict() {
         } else {
             var new_min = minval + (color_count * step_size);
             var new_max = minval;
-        }
+        };
 
         colorbar_dict = {
             'color_scale': colorscale,
@@ -333,9 +363,8 @@ function createColorBarDict() {
             'bins': 'None',
             'color_count': color_count + 1,
             'reverse': reverse
-        }
+        };
 
-        console.log(colorbar_dict);
         document.getElementById("id_colorscale_colorbar_dict_extra").value = JSON.stringify(colorbar_dict);
     } else {
         alert("Step size is zero!")
@@ -390,3 +419,13 @@ $(function() {
         }
     });
 });
+
+function emptyFieldSize(n) {
+    console.log(n);
+    // here we add some more space below extra settings
+    var empty_field = document.getElementById("empty-black-space");
+    var size = n * 50;
+    var size_str = size.toString() + "px"
+    console.log(size_str);
+    empty_field.style.height = size_str;
+};

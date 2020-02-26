@@ -8,9 +8,9 @@ def fetch_regions(request):
         q = request.GET.get('term', '')
         qtype = request.GET.get('type', '')
         if qtype == 'bundesland':
-            selected_regions = Bundesland.objects.filter(name__startswith = q)
+            selected_regions = Bundesland.objects.filter(name__istartswith = q)
         elif qtype == 'municipality':
-            selected_regions = Municipality.objects.filter(name__startswith = q)
+            selected_regions = Municipality.objects.filter(name__istartswith = q)
         results = []
         for mn in selected_regions:
             mn_json = {'value': mn.name}

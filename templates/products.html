@@ -147,7 +147,6 @@
               </div>
             </div>
           </div>
-
           <div class="form-row mb-2">
             <div class="col w-50 ml-4">
               <div class="form-group">
@@ -168,46 +167,49 @@
           </div>
 
           <div class="collapse" id="CollapseVisSet">
-            <div class="form-row">
-              <div class="form-group" style="display:none;">
-                <label for={{ product_form.colorscale_colorbar_dict_extra.id_for_label }}>{{ product_form.colorscale_colorbar_dict_extra.label }}</label>
-                {{ product_form.colorscale_colorbar_dict_extra }}
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-col col-lg-6">
-                <div class="form-group ml-4 mr-4">
-                  <label for={{ product_form.colorscale_name_extra.id_for_label }}>{{ product_form.colorscale_name_extra.label }}</label>
-                  {{ product_form.colorscale_name_extra|add_class:"oktav-dropdown form-control" }}
+             
+            <div id="color_related_fields">
+              <div class="form-row">
+                <div class="form-group" style="display:none;">
+                  <label for={{ product_form.colorscale_colorbar_dict_extra.id_for_label }}>{{ product_form.colorscale_colorbar_dict_extra.label }}</label>
+                  {{ product_form.colorscale_colorbar_dict_extra }}
                 </div>
               </div>
-            </div>
-            <div class="container col-lg-10 ml-4 mr-4" id="colorbar_colors" style="height:70px;"></div>
-            <div class="container col-lg-10 ml-4 mb-4" id="colorbar_values" style="height:10px;"></div>
-            <div class="form-row">
-              <div class="form-col col-lg-2 ml-4">
-                <div class="form-group">
-                  <label class="text-nowrap" for={{ product_form.colorscale_minval_extra.id_for_label }}>{{ product_form.colorscale_minval_extra.label }}</label>
-                  {{ product_form.colorscale_minval_extra|add_class:"oktav-dropdown form-control" }}
+              <div class="form-row">
+                <div class="form-col col-lg-6">
+                  <div class="form-group ml-4 mr-4">
+                    <label for={{ product_form.colorscale_name_extra.id_for_label }}>{{ product_form.colorscale_name_extra.label }}</label>
+                    {{ product_form.colorscale_name_extra|add_class:"oktav-dropdown form-control" }}
+                  </div>
                 </div>
               </div>
-              <div class="form-col col-lg-2">
-                <div class="form-group">
-                  <label for={{ product_form.colorscale_step_size_extra.id_for_label }}>{{ product_form.colorscale_step_size_extra.label }}</label>
-                  {{ product_form.colorscale_step_size_extra|add_class:"oktav-dropdown form-control" }}
+              <div class="container col-lg-10 ml-2 mr-4" id="colorbar_colors" style="height:70px;"></div>
+              <div class="container col-lg-10 ml-2 mb-4" id="colorbar_values" style="height:10px;"></div>
+              <div class="form-row">
+                <div class="form-col col-lg-2 ml-4">
+                  <div class="form-group">
+                    <label class="text-nowrap" for={{ product_form.colorscale_minval_extra.id_for_label }}>{{ product_form.colorscale_minval_extra.label }}</label>
+                    {{ product_form.colorscale_minval_extra|add_class:"oktav-dropdown form-control" }}
+                  </div>
                 </div>
-              </div>
-              <div class="form-col col-lg-1">
-                <div class="form-group">
-                  <label class="text-nowrap" for={{ product_form.colorscale_reverse_extra.id_for_label }}>{{ product_form.colorscale_reverse_extra.label }}</label>
-                  {{ product_form.colorscale_reverse_extra|add_class:"oktav-dropdown checkbox form-control" }}
+                <div class="form-col col-lg-2">
+                  <div class="form-group">
+                    <label for={{ product_form.colorscale_step_size_extra.id_for_label }}>{{ product_form.colorscale_step_size_extra.label }}</label>
+                    {{ product_form.colorscale_step_size_extra|add_class:"oktav-dropdown form-control" }}
+                  </div>
                 </div>
-              </div>
-              <div class="form-col col-lg-1 ml-4">
-                <label></label>
-                <button class="btn btn-success btn-sm" type="button" id="colorbar_generate_button" value="colorbar_dict">
-                  Redraw
-                </button>
+                <div class="form-col col-lg-1">
+                  <div class="form-group">
+                    <label class="text-nowrap" for={{ product_form.colorscale_reverse_extra.id_for_label }}>{{ product_form.colorscale_reverse_extra.label }}</label>
+                    {{ product_form.colorscale_reverse_extra|add_class:"oktav-dropdown checkbox form-control" }}
+                  </div>
+                </div>
+                <div class="form-col col-lg-1 ml-4">
+                  <label></label>
+                  <button class="btn btn-success btn-sm" type="button" id="colorbar_generate_button" value="colorbar_dict">
+                    Redraw
+                  </button>
+                </div>
               </div>
             </div>
             <div class="container" id="extra_settings"></div>
