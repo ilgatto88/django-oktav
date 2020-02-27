@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import NewProductRequestForm
 from oktav.products.product_processing import ProductRequest
+from oktav.visualization.vis import createMapColors
+from oktav.utils import importObject
 from .models import ProductFeature, Widget
 from django.http import HttpResponse
 
 import json
 
 # ezt le kell majd cserélni, minden productnak legyen sajátja
-default_colorbar_dict = '{"color_scale":"alfa","minval":0,"maxval":8,"step_size":1,"bins":"None","color_count":9,"reverse":false}'
+default_colorbar_dict = '{"color_scale":"alfa","minval":-20,"maxval":35,"step_size":1,"bins":"None","color_count":56,"reverse":false}'
 
 def home(request):
     return render(request, 'home.html')
@@ -16,34 +18,45 @@ def product_request(request):
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
         print(prf.errors)
+        print(request.POST)
         if prf.is_valid():
 
             get_colorbar_dict = request.POST.get('colorscale_colorbar_dict_extra')
-            if get_colorbar_dict == 'NA':
-                cscale = default_colorbar_dict
-            else:
-                cscale = get_colorbar_dict
-            
+            cscale = default_colorbar_dict if get_colorbar_dict == '' else get_colorbar_dict
+            cscale_loaded = json.loads(cscale)
+            cscale_loaded['bins'] = None if cscale_loaded['bins'] == 'None' else cscale_loaded['bins']
+
+            extended_cscale = createMapColors(
+                color_scale = cscale_loaded['color_scale'],
+                minval = cscale_loaded['minval'],
+                maxval= cscale_loaded['maxval'],
+                step_size = cscale_loaded['step_size'],
+                bins = cscale_loaded['bins'],
+                color_count = cscale_loaded['color_count'],
+                reverse = cscale_loaded['reverse'])
+
             visual_settings = {
-                'colorscale': json.loads(cscale),
+                'colorscale': extended_cscale,
                 'figsize_x': 30, 'figsize_y': 17, 'dpi': 300,
-                'rivers': request.POST.get('rivers_extra'),
-                'municipality_borders': request.POST.get('municipality_borders_extra'),
-                'state_borders': request.POST.get('state_borders_extra'),
-                'country_borders': request.POST.get('country_borders_extra'), 
-                'hillshade': request.POST.get('hillshade_extra'),
-                'linediagram_grid': request.POST.get('linediagram_grid_extra'),
-                'smooth': request.POST.get('smooth_extra'),
-                'infobox': request.POST.get('infobox_extra'),
-                'boxplot': request.POST.get('boxplot_extra'),
-                'title': request.POST.get('title_extra'),
-                'secondary_y_axis': request.POST.get('secondary_y_axis_extra')
+                'rivers': request.POST.get('rivers_extra') == 'on',
+                'municipality_borders': request.POST.get('municipality_borders_extra') == 'on',
+                'state_borders': request.POST.get('state_borders_extra') == 'on',
+                'country_borders': request.POST.get('country_borders_extra') == 'on', 
+                'hillshade': request.POST.get('hillshade_extra') == 'on',
+                'linediagram_grid': request.POST.get('linediagram_grid_extra') == 'on',
+                'smooth': request.POST.get('smooth_extra') == 'on',
+                'infobox': request.POST.get('infobox_extra') == 'on',
+                'boxplot': request.POST.get('boxplot_extra') == 'on',
+                'title': request.POST.get('title_extra') == 'on',
+                'secondary_y_axis': request.POST.get('secondary_y_axis_extra') == 'on'
                 }
 
-            if request.POST.get('region_option') == 'austria':
-                region = ['austria']
-            else:
-                region = request.POST.get('region')
+            region = ['austria'] if request.POST.get('region_option') == 'austria' else (request.POST.get('region')[0:-2]).replace(" ", "").split(",")
+
+            lhf_from_html = request.POST.get('lower_height_filter')
+            uhf_from_html = request.POST.get('upper_height_filter')
+            adj_lower_height_filter = None if lhf_from_html == '0' else int(lhf_from_html)
+            adj_upper_height_filter = None if uhf_from_html == '0' else int(uhf_from_html)
 
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
@@ -53,16 +66,17 @@ def product_request(request):
                 scenario = [request.POST.get('scenario')],
                 region_option = request.POST.get('region_option'),
                 region = region,
-                period = [request.POST.get('period_start'), request.POST.get('period_end')],
-                reference_period = [request.POST.get('reference_period_start'), request.POST.get('reference_period_end')],
-                lower_height_filter = request.POST.get('lower_height_filter'),
-                upper_height_filter = request.POST.get('upper_height_filter'),
+                period = [request.POST.get('period_start')+"-01-01", request.POST.get('period_end')+"-01-01"],
+                reference_period = [request.POST.get('reference_period_start')+"-01-01", request.POST.get('reference_period_end')+"-01-01"],
+                lower_height_filter = adj_lower_height_filter,
+                upper_height_filter = adj_upper_height_filter,
                 visual_settings = visual_settings,
                 output_path = request.POST.get('output_path'),
                 output_type = request.POST.get('output_type')
             )
-            print(PR.__dict__)
-            #func = getattr(PR, product_catalog[PR.product_type]['function'))
+            print(PR)
+            product_func = ProductFeature.objects.filter(name = PR.product_type)[0].function
+            #func = getattr(PR, product_func)
             #func()
             
             return redirect(reverse('product_result'))
@@ -108,7 +122,7 @@ def fetch_product_features(request):
                 result = {field: widget_dict}
                 data = json.dumps(result)
             else:
-                data = json.dumps({"None": "None"})
+                data = json.dumps({"widgets": {"None": "None"}})
     else:
         data = 'fail'
     mimetype = 'application/json'
@@ -135,3 +149,20 @@ def get_static_file(request):
 
 def documentation(request):
     return render(request, '_build/html/index.html')
+
+def getModelObjects(request):
+    if request.is_ajax():
+        model = request.GET.get('model', '').capitalize()
+        obj = importObject(obj_name='products.models.' + model)
+        all_objs = obj.objects.all()
+        olist = []
+        for o in all_objs:
+            olist.append(o.name)
+
+        result = {'objects': olist}
+        data = json.dumps(result)
+    else:
+        data = 'fail'
+        
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

@@ -22,7 +22,7 @@
             <div class="form-col w-75">
               <div class="form-group ml-4 mr-1">
                 <label for={{ product_form.product_type.id_for_label }}>{{ product_form.product_type.label }}</label>
-                {{ product_form.product_type|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.product_type|add_class:"oktav-dropdown form-control"|attr:"title:By selecting a predefined product, input fields can be automatically enabled/disabled or set to a default value." }}
               </div>
             </div>
             <div class="form-col w-25">
@@ -59,7 +59,7 @@
             <div class="form-col w-50">
               <div class="form-group mr-4">
                 <label for={{ product_form.season.id_for_label }}>{{ product_form.season.label }}</label>
-                {{ product_form.season|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.season|add_class:"oktav-dropdown form-control"|attr:"title:Only enabled if Aggregation period 'Seasonal' is selected" }}
               </div>
             </div>
           </div>
@@ -83,13 +83,13 @@
             <div class="form-col col-lg-2">
               <div class="form-group">
                 <label class="text-nowrap" for={{ product_form.period_start.id_for_label }}>{{ product_form.period_start.label }}</label>
-                {{ product_form.period_start|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.period_start|add_class:"oktav-dropdown form-control"|attr:"title:SPARTACUS: 1961-2018, ÖKS: 1971-2100" }}
               </div>
             </div>
             <div class="form-col col-lg-2">
               <div class="form-group">
                 <label style="color:transparent;" for={{ product_form.period_end.id_for_label }}>{{ product_form.period_end.label }}</label>
-                {{ product_form.period_end|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.period_end|add_class:"oktav-dropdown form-control"|attr:"title:SPARTACUS: 1961-2018, ÖKS: 1971-2100" }}
               </div>
             </div>
             <div class="form-col ml-4 col-lg-1">
@@ -116,7 +116,7 @@
             <div class="form-col">
               <div class="form-group ml-4 mr-1">
                 <label for={{ product_form.lower_height_filter.id_for_label }}>{{ product_form.lower_height_filter.label }}</label>
-                {{ product_form.lower_height_filter|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.lower_height_filter|add_class:"oktav-dropdown form-control"|attr:"title:If this is zero, no height filter will be used" }}
               </div>
             </div>
             <div class="form-col">
@@ -128,7 +128,7 @@
             <div class="form-col">
               <div class="form-group ml-1 mr-4">
                 <label for={{ product_form.upper_height_filter.id_for_label }}>{{ product_form.upper_height_filter.label }}</label>
-                {{ product_form.upper_height_filter|add_class:"oktav-dropdown form-control" }}
+                {{ product_form.upper_height_filter|add_class:"oktav-dropdown form-control"|attr:"title:If this is zero, no height filter will be used" }}
               </div>
             </div>
           </div>
@@ -150,7 +150,8 @@
           <div class="form-row mb-2">
             <div class="col w-50 ml-4">
               <div class="form-group">
-                <button class="btn btn-secondary" id="collapse_button" type="button"
+                <button class="btn btn-secondary" id="collapse_button"
+                        type="button" title="Addition settings for the selected product"
                         data-toggle="collapse" data-target="#CollapseVisSet"
                         aria-expanded="false" aria-controls="CollapseVisSet">
                   Settings
@@ -170,8 +171,7 @@
              
             <div id="color_related_fields">
               <div class="form-row">
-                <div class="form-group" style="display:none;">
-                  <label for={{ product_form.colorscale_colorbar_dict_extra.id_for_label }}>{{ product_form.colorscale_colorbar_dict_extra.label }}</label>
+                <div class="form-group">
                   {{ product_form.colorscale_colorbar_dict_extra }}
                 </div>
               </div>
@@ -212,7 +212,21 @@
                 </div>
               </div>
             </div>
-            <div class="container" id="extra_settings"></div>
+            <div class="container" id="extra_settings">
+              {% for widget in product_form %}
+                {% if 'colorscale' not in widget.name and '_extra' in widget.name %}
+                  <div class="form-row" id="{{ widget.id_for_label }}">
+                    <div class="form-col col-lg-6 ml-2">
+                      <div class="form-group mb-0">
+                        <input type="hidden" name='{{ widget.id_for_label }}' value="False"></input>
+                        {{ widget|add_class:"oktav-dropdown" }}
+                        <label class="text-nowrap ml-2" for={{ widget.id_for_label }}>{{ widget.label }}</label>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
           </div>
         </form>
       </section>

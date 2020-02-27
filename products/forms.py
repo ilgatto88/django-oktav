@@ -1,5 +1,6 @@
 import json
 from django import forms
+from django.forms import ModelForm
 
 from .models import ProductFeature, Parameter, AggregationPeriod, Season
 from .models import Scenario, RegionOption, OutputType
@@ -46,7 +47,13 @@ class NewProductRequestForm(forms.Form):
     season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False, disabled=True)
     scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES, required=False)
     region_option = forms.ChoiceField(label='Region option', choices=REGION_OPTION_CHOICES)
-    region = forms.CharField(label='Region(s)', max_length=1000, required=False, disabled=True)
+    region = forms.CharField(
+        label='Region(s)',
+        max_length=1000,
+        required=False,
+        disabled=True,
+        widget=forms.TextInput(attrs={'placeholder': "Start typing (2 letters needed)"})
+        )
 
     period_start = forms.IntegerField(label='Period', initial=2021, min_value=1961, max_value=2099)
     period_end = forms.IntegerField(label='.', initial=2050, min_value=1962, max_value=2100)
@@ -72,7 +79,7 @@ class NewProductRequestForm(forms.Form):
     colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
     colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
     colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
-    colorscale_colorbar_dict_extra = forms.CharField(label="Colorbar", max_length=200, required = False, initial='NA')
+    colorscale_colorbar_dict_extra = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     ## Additional checkboxes
     rivers_extra = forms.BooleanField(label="Rivers", initial=False, required=False)

@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions'),
     url(r'^api/get_product_features/', products_view.fetch_product_features, name = 'get_product_features'),
     url(r'^api/get_static_file/', products_view.get_static_file, name = "get_static_file"),
+    url(r'^api/get_model_objects/', products_view.getModelObjects, name = "get_model_objects"),
     url(r'^docs/', include('docs.urls'))
 ]
