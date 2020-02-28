@@ -52,10 +52,17 @@ def product_request(request):
                 }
             ################################
 
+            ########## 2nd parameter ##########
+            if 'parameter2' in request.POST.keys():
+                param = [request.POST.get('parameter'), request.POST.get('parameter2')]
+            else:
+                param = request.POST.get('parameter')
+            ################################
+
             ########## season ##########
             if request.POST.get('aggregation_period') == 'YS':
-                datum_start = '01-01'
-                datum_end = '01-01'
+                datum_start = '-01-01'
+                datum_end = '-01-01'
             elif request.POST.get('aggregation_period') == 'QS-DEC':
                 obj = Season.objects.filter(name=request.POST.get('season'))[0]
                 datum_start = getattr(obj, 'datum_start')
@@ -98,7 +105,7 @@ def product_request(request):
 
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
-                parameter = request.POST.get('parameter'),
+                parameter = param,
                 aggregation_period = request.POST.get('aggregation_period'),
                 season = request.POST.get('season'),
                 scenario = [request.POST.get('scenario')],

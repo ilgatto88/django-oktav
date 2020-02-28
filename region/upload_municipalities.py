@@ -12,5 +12,3 @@ for k,v in data.items():
     else:
         print('Municipality from Südtirol, wont be uploaded')
 """
-
-
