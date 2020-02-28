@@ -3,7 +3,7 @@ from .forms import NewProductRequestForm
 from oktav.products.product_processing import ProductRequest
 from oktav.visualization.vis import createMapColors
 from oktav.utils import importObject
-from .models import ProductFeature, Widget
+from .models import ProductFeature, Widget, Season
 from django.http import HttpResponse
 
 import json
@@ -20,6 +20,7 @@ def product_request(request):
         print(request.POST)
         if prf.is_valid():
 
+            ########## visual settings ##########
             get_colorbar_dict = request.POST.get('colorscale_colorbar_dict_extra')
             cscale = default_colorbar_dict if get_colorbar_dict == '' else get_colorbar_dict
             cscale_loaded = json.loads(cscale)
@@ -49,10 +50,25 @@ def product_request(request):
                 'title': request.POST.get('title_extra') == 'on',
                 'secondary_y_axis': request.POST.get('secondary_y_axis_extra') == 'on'
                 }
+            ################################
 
+            ########## season ##########
+            if request.POST.get('aggregation_period') == 'YS':
+                datum_start = '01-01'
+                datum_end = '01-01'
+            elif request.POST.get('aggregation_period') == 'QS-DEC':
+                obj = Season.objects.filter(name=request.POST.get('season'))[0]
+                datum_start = getattr(obj, 'datum_start')
+                datum_end = getattr(obj, 'datum_end')
+            ################################
+
+
+            ########## region ##########
             region = ['austria'] if request.POST.get('region_option') == 'austria' else (request.POST.get('region')[0:-2]).replace(" ", "").split(",")
+            ################################
 
-            # height filters
+
+            ########## height filters ##########
             lhf_from_html = request.POST.get('lower_height_filter')
             uhf_from_html = request.POST.get('upper_height_filter')
             if uhf_from_html == '0':
@@ -67,9 +83,18 @@ def product_request(request):
                     adj_lower_height_filter = 0
                 else:
                     adj_lower_height_filter = int(lhf_from_html)
+            ################################
 
-            # reference period
-            #if request.POST.get('id_reference_period_checkbox') == False:
+
+            ########## reference period ##########
+            if request.POST.get('id_reference_period_checkbox') == 'False':
+                refper = None
+            else:
+                refper = [
+                    request.POST.get('reference_period_start')+datum_start,
+                    request.POST.get('reference_period_end')+datum_end
+                    ]
+            ################################
 
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
@@ -79,8 +104,8 @@ def product_request(request):
                 scenario = [request.POST.get('scenario')],
                 region_option = request.POST.get('region_option'),
                 region = region,
-                period = [request.POST.get('period_start')+"-01-01", request.POST.get('period_end')+"-01-01"],
-                reference_period = [request.POST.get('reference_period_start')+"-01-01", request.POST.get('reference_period_end')+"-01-01"],
+                period = [request.POST.get('period_start')+datum_start, request.POST.get('period_end')+datum_end],
+                reference_period = refper,
                 lower_height_filter = adj_lower_height_filter,
                 upper_height_filter = adj_upper_height_filter,
                 visual_settings = visual_settings,

@@ -1,3 +1,4 @@
+"""
 from oktav.static.austria_gemeinden import create_gemeinde_dict
 from region.models import Municipality
 
@@ -10,6 +11,6 @@ for k,v in data.items():
         m.save()
     else:
         print('Municipality from Südtirol, wont be uploaded')
-    
+"""
 
 
