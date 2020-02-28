@@ -47,6 +47,8 @@ class AggregationPeriod(models.Model):
 class Season(models.Model):
     name = models.CharField(max_length=10)
     print_name = models.CharField(max_length=100)
+    datum_start = models.CharField(max_length=10)
+    datum_end = models.CharField(max_length=10)
 
     def __str__(self):
         return self.print_name

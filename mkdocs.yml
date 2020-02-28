@@ -1,7 +1,22 @@
 site_name: OKTAV Documentation
+
 docs_dir: 'mkdocs'
 site_dir: 'docs/static/mkdocs_build'
-pages:
-  - Home: index.md
+
+nav:
+  - Back to OKTAV: /
+  - Home:
+    - index.md
+  - Data:
+    - Database: database.md
+    - Climate data: climdata.md
+  - User guide:
+    - General: portal_general.md
+    - Instuctions: portal_instructions.md
+  - About:
+    - About: about.md
+    - Changelog: changelog.md
+    - Version control: vcontrol.md
+
 theme:
-  name: 'rtd-dropdown'
+  name: 'readthedocs'

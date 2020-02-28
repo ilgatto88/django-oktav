@@ -8,7 +8,6 @@ from django.http import HttpResponse
 
 import json
 
-# ezt le kell majd cserélni, minden productnak legyen sajátja
 default_colorbar_dict = '{"color_scale":"alfa","minval":-20,"maxval":35,"step_size":1,"bins":"None","color_count":56,"reverse":false}'
 
 def home(request):
@@ -53,10 +52,24 @@ def product_request(request):
 
             region = ['austria'] if request.POST.get('region_option') == 'austria' else (request.POST.get('region')[0:-2]).replace(" ", "").split(",")
 
+            # height filters
             lhf_from_html = request.POST.get('lower_height_filter')
             uhf_from_html = request.POST.get('upper_height_filter')
-            adj_lower_height_filter = None if lhf_from_html == '0' else int(lhf_from_html)
-            adj_upper_height_filter = None if uhf_from_html == '0' else int(uhf_from_html)
+            if uhf_from_html == '0':
+                adj_upper_height_filter = None
+                if lhf_from_html == '0':
+                    adj_lower_height_filter = None
+                else:
+                    adj_lower_height_filter = int(lhf_from_html)
+            else:
+                adj_upper_height_filter = int(uhf_from_html)
+                if lhf_from_html == '0':
+                    adj_lower_height_filter = 0
+                else:
+                    adj_lower_height_filter = int(lhf_from_html)
+
+            # reference period
+            #if request.POST.get('id_reference_period_checkbox') == False:
 
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
@@ -76,8 +89,8 @@ def product_request(request):
             )
             print(PR)
             product_func = ProductFeature.objects.filter(name = PR.product_type)[0].function
-            #func = getattr(PR, product_func)
-            #func()
+            func = getattr(PR, product_func)
+            func()
             
             return redirect(reverse('product_result'))
         else:

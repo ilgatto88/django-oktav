@@ -95,6 +95,7 @@
             <div class="form-col ml-4 col-lg-1">
               <div class="form-group">
                 <label class="text-nowrap" for={{ product_form.reference_period_checkbox.id_for_label }}>{{ product_form.reference_period_checkbox.label }}</label>
+                <input type="hidden" name='{{ product_form.reference_period_checkbox.id_for_label }}' value="False"></input>
                 {{ product_form.reference_period_checkbox|add_class:"oktav-dropdown checkbox form-control" }}
               </div>
             </div>
