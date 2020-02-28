@@ -1,10 +1,9 @@
-# Wilkommen
+# Welcome
 
 Österreichisches Klimatool für Analyse und Visualisierung (OKTAV)
 
-Hier bekommt Ihr allgemeine Hilfe für den Einstieg in die OKTAV Software. Es werden
-grundlegende Konzepte erklärt und Funktionen beschrieben.
-Die Dokumentation steht unter Entwicklung und ist somit nicht vollständig.
+General information and help regarding OKTAV software
+The documentation is under construction and therefore not final.
 
 
-Stand der Informationen: 28.02.2020
+Build: 28.02.2020
