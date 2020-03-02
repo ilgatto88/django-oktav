@@ -94,15 +94,18 @@ def product_request(request):
 
 
             ########## reference period ##########
-            if request.POST.get('id_reference_period_checkbox') == 'False':
-                refper = None
+            if 'reference_period_checkbox' in request.POST.keys():
+                if request.POST.get('reference_period_checkbox') != 'on':
+                    refper = None
+                else:
+                    refper = [
+                        request.POST.get('reference_period_start')+datum_start,
+                        request.POST.get('reference_period_end')+datum_end
+                        ]
             else:
-                refper = [
-                    request.POST.get('reference_period_start')+datum_start,
-                    request.POST.get('reference_period_end')+datum_end
-                    ]
+                refper = None
             ################################
-
+            print(param)
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
                 parameter = param,

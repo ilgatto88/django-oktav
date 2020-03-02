@@ -44,7 +44,6 @@
               <div class="form-group mr-4">
                 <label for={{ product_form.parameter2.id_for_label }}>{{ product_form.parameter2.label }}</label>
                 {{ product_form.parameter2|add_class:"oktav-dropdown form-control" }}
-                <script>document.getElementById("parameter2_div").style.visibility = "hidden";</script>
               </div>
             </div>
           </div>
@@ -95,7 +94,6 @@
             <div class="form-col ml-4 col-lg-1">
               <div class="form-group">
                 <label class="text-nowrap" for={{ product_form.reference_period_checkbox.id_for_label }}>{{ product_form.reference_period_checkbox.label }}</label>
-                <input type="hidden" name='{{ product_form.reference_period_checkbox.id_for_label }}' value="False"></input>
                 {{ product_form.reference_period_checkbox|add_class:"oktav-dropdown checkbox form-control" }}
               </div>
             </div>
@@ -202,6 +200,7 @@
                 <div class="form-col col-lg-1">
                   <div class="form-group">
                     <label class="text-nowrap" for={{ product_form.colorscale_reverse_extra.id_for_label }}>{{ product_form.colorscale_reverse_extra.label }}</label>
+                    <input type="hidden" name='{{ product_form.colorscale_reverse_extra.id_for_label }}' value="False"></input>
                     {{ product_form.colorscale_reverse_extra|add_class:"oktav-dropdown checkbox form-control" }}
                   </div>
                 </div>

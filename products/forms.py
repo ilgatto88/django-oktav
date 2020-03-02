@@ -42,7 +42,7 @@ class NewProductRequestForm(forms.Form):
     # Product settings
     product_type = forms.ChoiceField(label='Product type', choices=PRODUCT_TYPE_CHOICES)
     parameter = forms.ChoiceField(label='Parameter', choices=PARAMETER_CHOICES)
-    parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False)
+    parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False, disabled=True)
     aggregation_period = forms.ChoiceField(label='Aggregation period', choices=AGGRETATION_PERIOD_CHOICES)
     season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False, disabled=True)
     scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES, required=False)

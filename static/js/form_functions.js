@@ -1,58 +1,129 @@
 window.onload = function () {
+    productTypeSettings();
+
     document.getElementById("id_region_option").onchange = enableRegionField;
     document.getElementById("id_aggregation_period").onchange = enableSeasonField;
     document.getElementById("id_product_type").onchange = productTypeSettings;
     document.getElementById("collapse_button").onclick = collapseEvents;
-    document.getElementById("colorbar_generate_button").onclick = reDrawColorBar;
+    document.getElementById("colorbar_generate_button").onclick = reDrawColorBarButtonClicked;
     document.getElementById("id_reference_period_checkbox").onchange = enableReferencePeriodFields;
-    document.getElementById("id_colorscale_name_extra").onchange = reDrawColorBar;
+    document.getElementById("id_colorscale_name_extra").onchange = colorBarChanged;
 };
 
-function reDrawColorBar() {
-    if (document.getElementById("colorbar_colors").innerHTML.indexOf("table") != -1) {
-        document.getElementById("colorbar_colors").innerHTML = "";
-    };
+function reDrawColorBarButtonClicked() {
+    // make colorbar innerHTML empty
+    makeColorBarDivInnerHTMLEmpy();
+    // redraw colorbar div
     createColorScaleDiv(create_html_colordict(redraw = true));
-    createColorBarDict();
+    // update colorbar dict
+    updateColorBarDict(createColorBarDict());
 };
 
-// This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
-function collapseEvents() {
-    var product_widgets = getProductFeatures(field_name = 'widgets');
-    var parsed_product_widgets = JSON.parse(product_widgets);
-    var number_of_widgets = Object.keys(parsed_product_widgets['widgets']).length;
+function colorBarChanged() {
+    // get colorbar features
+    var colorbar_features = getColorBarFeatures();
+    // fill in colorbar related fields
+    setColorBarFields(colorbar_features);
+    // make colorbar innerHTML empty
+    makeColorBarDivInnerHTMLEmpy();
+    // redraw colorbar div
+    createColorScaleDiv(create_html_colordict(redraw = false));
+    // update colorbar dict
+    updateColorBarDict(createColorBarDict());
+};
 
-    // here we add the extra buttons
-    var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
-    if (field_collapsed == "false") {
-        emptyFieldSize(number_of_widgets);
-        if (document.getElementById("colorbar_colors").innerHTML.indexOf("table") != -1) {
-            document.getElementById("colorbar_colors").innerHTML = "";
-        };
-        createColorScaleDiv(create_html_colordict());
-        enableDisableCheckboxes(product_widgets);
+function collapseColorBarChanges() {
+    // check if colorbar dict is empty, if yes
+    if (document.getElementById("id_colorscale_colorbar_dict_extra").value == '') {
+        // colorBarChanged
+        colorBarChanged();
+    };
+};
+
+// ############# colorbar related functions #################################
+
+function setColorBarFields(cbar_fields_dict) {
+    document.getElementById("id_colorscale_minval_extra").value = cbar_fields_dict['minval'];
+    document.getElementById("id_colorscale_step_size_extra").value = cbar_fields_dict['step'];
+    document.getElementById("id_colorscale_reverse_extra").value = cbar_fields_dict['reverse'];
+};
+
+function getColorBarFeatures(colorscale = "None") {
+    var colorscales = JSON.parse(getStaticFile('products/static/colorscales.json'));
+    if (colorscale == "None") {
+        var selected_colorscale = document.getElementById("id_colorscale_name_extra").value;
     } else {
-        emptyFieldSize(0);
+        var selected_colorscale = colorscale;
+    };
+    return colorscales[selected_colorscale];
+};
+
+function collectColorBarFields() {
+    var dict = {
+        colorscale: document.getElementById("id_colorscale_name_extra").value,
+        minval: parseFloat(document.getElementById("id_colorscale_minval_extra").value),
+        step: parseFloat(document.getElementById("id_colorscale_step_size_extra").value),
+        reverse: document.getElementById("id_colorscale_reverse_extra").checked,
+    };
+    return dict
+};
+
+function makeColorBarDivInnerHTMLEmpy() {
+    document.getElementById("colorbar_colors").innerHTML = "";
+};
+
+function updateColorBarDict(cbar_dict) {
+    document.getElementById("id_colorscale_colorbar_dict_extra").value = JSON.stringify(cbar_dict);
+};
+
+// This function creates a dictionary for the html POST request
+function createColorBarDict() {
+    var field_values = collectColorBarFields();
+    var colors = JSON.parse(getStaticFile('products/static/colors.json'));
+    color_count = colors[field_values['colorscale']].length;
+
+    if (field_values['step'] != 0.0) {
+        if (field_values['step'] > 0) {
+            var new_min = field_values['minval'];
+            var new_max = new_min + (color_count * field_values['step']);
+        } else {
+            var new_min = field_values['minval'] + (color_count * field_values['step']);
+            var new_max = field_values['minval'];
+        };
+
+        colorbar_dict = {
+            'color_scale': field_values['colorscale'],
+            'minval': parseFloat(new_min.toFixed(1)),
+            'maxval': parseFloat(new_max.toFixed(1)),
+            'step_size': field_values['step'],
+            'bins': 'None',
+            'color_count': color_count + 1,
+            'reverse': field_values['reverse']
+        };
+
+        console.log(colorbar_dict);
+        return colorbar_dict;
+    } else {
+        alert("Step size is zero!")
     };
 };
 
 function create_html_colordict(redraw = false) {
-
     var colorscales = JSON.parse(getStaticFile('products/static/colorscales.json'));
     var colors = JSON.parse(getStaticFile('products/static/colors.json'));
 
-    var selected_colorscale = document.getElementById("id_colorscale_name_extra").value;
-    var selected_colorscale_features = colorscales[selected_colorscale];
-    var selected_colors = colors[selected_colorscale];
+    var colorscale_fields = collectColorBarFields();
+    var selected_colorscale_features = colorscales[colorscale_fields['colorscale']];
+    var selected_colors = colors[colorscale_fields['colorscale']];
 
     var colorbar_reversed = false;
     if (redraw == true) {
-        if (document.getElementById("id_colorscale_reverse_extra").checked == true) {
+        if (colorscale_fields['reverse'] == true) {
             var selected_colors = selected_colors.reverse();
             colorbar_reversed = true;
         };
-        var minval = parseFloat(document.getElementById("id_colorscale_minval_extra").value);
-        var step = parseFloat(document.getElementById("id_colorscale_step_size_extra").value);
+        var minval = colorscale_fields['minval'];
+        var step = colorscale_fields['step'];
         value_array = []
         for (var i = 0; i < selected_colors.length; i++) {
             val = (minval + (i * step)).toFixed(1);
@@ -78,130 +149,14 @@ function create_html_colordict(redraw = false) {
         };
     };
 
-    var colordict = {
-        colors: colors[selected_colorscale],
+    var html_colordict = {
+        colors: colors[colorscale_fields['colorscale']],
         values: value_array,
         step: step,
         reversed: colorbar_reversed,
         unit: selected_colorscale_features["unit"]
     };
-    return colordict;
-};
-
-function getStaticFile(url, callback) {
-    var file_contents = $.ajax({
-        url: "/api/get_static_file/",
-        type: "GET",
-        async: false,
-        dataType: 'json',
-        data: {
-            file: url
-        }
-    });
-    return file_contents.responseText;
-};
-
-// This function adjust selectable settings in form based on the product name
-function productTypeSettings() {
-
-    // get product features
-    var productFeatures = getProductFeatures(field_name = 'all', set_async = false);
-    var parsed_productFeatures = JSON.parse(productFeatures);
-
-    // enable scenario field
-    var scenario_field = document.getElementById("id_scenario");
-    var scenario_enabled = parsed_productFeatures['selectable_rcp'];
-    if (scenario_enabled == true) {
-        scenario_field.disabled = false;
-    } else {
-        scenario_field.disabled = true;
-    };
-
-    // 2nd parameter field
-    var second_param_field_enabled = parsed_productFeatures['has_second_parameter'];
-    var parameter2_field = document.getElementById("parameter2_div");
-    if (second_param_field_enabled == true) {
-        parameter2_field.style.visibility = "visible";
-    } else {
-        parameter2_field.style.visibility = "hidden";
-    };
-
-    // lock reference perid checkbox
-    var product_must_have_reference_period = parsed_productFeatures['must_have_reference_period'];
-    var ref_per_checkbox = document.getElementById("id_reference_period_checkbox");
-    if (product_must_have_reference_period == true) {
-        ref_per_checkbox.checked = true;
-        ref_per_checkbox.disabled = true;
-    } else {
-        ref_per_checkbox.disabled = false;
-        ref_per_checkbox.checked = true;
-    }
-
-    // enable/disable output types
-    var output_type_field = document.getElementById("id_output_type");
-    var output_count = output_type_field.options.length;
-    var product_type_outputs = parsed_productFeatures['output_types'];
-    for (i = 0; i < output_count; i++) {
-        var mod_i = i.toString().concat(',');
-        if (product_type_outputs.includes(mod_i) == true) {
-            output_type_field.options[i].disabled = false;
-        } else {
-            output_type_field.options[i].disabled = true;
-        };
-    };
-
-    var product_widgets = getProductFeatures(field_name = 'widgets');
-    var product_widgets_str = JSON.stringify(product_widgets);
-    enableDisableCheckboxes(product_widgets);
-
-    // show/hide color related fields
-
-    if (product_widgets_str.includes("colorscale") == false) {
-        document.getElementById("color_related_fields").style.display = "none";
-    } else {
-        document.getElementById("color_related_fields").style.display = "block";
-    };
-
-    // extra settings in collapsable area
-    
-    /*
-    var extra_settings_field = document.getElementById('extra_settings');
-    var field_collapsed = document.getElementById("collapse_button").getAttribute("aria-expanded");
-    if (field_collapsed == "true") {
-        extra_settings_field.innerHTML = "";
-        createExtraSettingsCheckboxes(product_widgets);
-    } else {
-        extra_settings_field.innerHTML = "";
-    };
-    */
-    
-};
-
-function getProductFeatures(field_name, set_async = false, callback) {
-    var widgets_call_result = $.ajax({
-        url: "/api/get_product_features/",
-        type: "GET",
-        async: set_async,
-        dataType: 'json',
-        data: {
-            product_name: document.getElementById("id_product_type").value,
-            field: field_name
-        }
-    });
-    return widgets_call_result.responseText;
-};
-
-function getModelObjects(model, callback) {
-    var widgets_call_result = $.ajax({
-        url: "/api/get_model_objects/",
-        type: "GET",
-        async: false,
-        dataType: 'json',
-        data: {
-            model: model
-        }
-    });
-    return widgets_call_result.responseText;
+    return html_colordict;
 };
 
 function createColorScaleDiv(colordict) {
@@ -247,6 +202,87 @@ function createColorScaleDiv(colordict) {
     colorBarDivInfo.style.color = 'white';
 
 };
+
+// ############# end of colorbar related functions ##########################
+
+
+// This function enlarges or shrinks the paragraph based on it's actual size, connected to a button
+function collapseEvents() {
+    var product_widgets = getProductFeatures(field_name = 'widgets');
+    var parsed_product_widgets = JSON.parse(product_widgets);
+    var number_of_widgets = Object.keys(parsed_product_widgets['widgets']).length;
+
+    // here we add the extra buttons
+    if (document.getElementById("collapse_button").getAttribute("aria-expanded") == "false") {
+        emptyFieldSize(number_of_widgets);
+        collapseColorBarChanges();
+        enableDisableCheckboxes(product_widgets);
+    } else {
+        emptyFieldSize(0);
+    };
+};
+
+function emptyFieldSize(n) {
+    // here we add some more space below extra settings
+    var empty_field = document.getElementById("empty-black-space");
+    var r = (n > 0) ? -1 : 0;
+    var size = (n - r) * 70;
+    var size_str = size.toString() + "px"
+    empty_field.style.height = size_str;
+};
+
+// This function adjust selectable settings in form based on the product name
+function productTypeSettings() {
+
+    // get product features
+    var productFeatures = getProductFeatures(field_name = 'all', set_async = false);
+    var parsed_productFeatures = JSON.parse(productFeatures);
+
+    // enable scenario field
+    var scenario_field = document.getElementById("id_scenario");
+    var scenario_enabled = parsed_productFeatures['selectable_rcp'];
+    if (scenario_enabled == true) {
+        scenario_field.disabled = false;
+    } else {
+        scenario_field.disabled = true;
+    };
+
+    // 2nd parameter field
+    var second_param_field_enabled = parsed_productFeatures['has_second_parameter'];
+    var parameter2_field = document.getElementById("parameter2_div");
+    if (second_param_field_enabled == true) {
+        parameter2_field.style.visibility = "visible";
+        parameter2_field.disabled = false;
+    } else {
+        parameter2_field.style.visibility = "hidden";
+        parameter2_field.disabled = true;
+    };
+
+    // lock reference perid checkbox
+    var product_must_have_reference_period = parsed_productFeatures['must_have_reference_period'];
+    var ref_per_checkbox = document.getElementById("id_reference_period_checkbox");
+    if (product_must_have_reference_period == true) {
+        ref_per_checkbox.required = true;
+    } else {
+        ref_per_checkbox.required = false;
+    }
+
+    // enable/disable output types
+    select_output_types(parsed_productFeatures);
+
+    var product_widgets = getProductFeatures(field_name = 'widgets');
+    var product_widgets_str = JSON.stringify(product_widgets);
+    enableDisableCheckboxes(product_widgets);
+
+    // show/hide color related fields
+    if (product_widgets_str.includes("colorscale") == false) {
+        document.getElementById("color_related_fields").style.display = "none";
+    } else {
+        document.getElementById("color_related_fields").style.display = "block";
+    };
+};
+
+// ## form field functions ##
 
 function enableDisableCheckboxes(pc) {
     var product_checkboxes = JSON.parse(pc)['widgets'];
@@ -299,40 +335,67 @@ function enableReferencePeriodFields() {
     };
 };
 
-// This function creates a dictionary for the colorbar using the form fields of the document
-function createColorBarDict() {
-    colorscale = document.getElementById("id_colorscale_name_extra").value;
-    minval = parseFloat(document.getElementById("id_colorscale_minval_extra").value);
-    step_size = parseFloat(document.getElementById("id_colorscale_step_size_extra").value);
-    reverse = document.getElementById("id_colorscale_reverse_extra").checked;
-
-    var colors = JSON.parse(getStaticFile('products/static/colors.json'));
-
-    color_count = colors[colorscale].length;
-
-    if (step_size != 0.0) {
-        if (step_size > 0) {
-            var new_min = minval;
-            var new_max = new_min + (color_count * step_size);
+function select_output_types(product_features) {
+    var output_type_field = document.getElementById("id_output_type");
+    var output_count = output_type_field.options.length;
+    var product_type_outputs = product_features['output_types'];
+    var first = true;
+    for (i = 0; i < output_count; i++) {
+        var mod_i = i.toString().concat(',');
+        if (product_type_outputs.includes(mod_i) == true) {
+            output_type_field.options[i].disabled = false;
+            if (first == true) {
+                output_type_field.selectedIndex = i.toString();
+                first = false;
+            };
         } else {
-            var new_min = minval + (color_count * step_size);
-            var new_max = minval;
+            output_type_field.options[i].disabled = true;
         };
-
-        colorbar_dict = {
-            'color_scale': colorscale,
-            'minval': new_min,
-            'maxval': new_max,
-            'step_size': step_size,
-            'bins': 'None',
-            'color_count': color_count + 1,
-            'reverse': reverse
-        };
-
-        document.getElementById("id_colorscale_colorbar_dict_extra").value = JSON.stringify(colorbar_dict);
-    } else {
-        alert("Step size is zero!")
     };
+};
+
+// ## end of form field functions ##
+
+// ## AJAX requests ## //
+
+function getStaticFile(url, callback) {
+    var file_contents = $.ajax({
+        url: "/api/get_static_file/",
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        data: {
+            file: url
+        }
+    });
+    return file_contents.responseText;
+};
+
+function getProductFeatures(field_name, set_async = false, callback) {
+    var widgets_call_result = $.ajax({
+        url: "/api/get_product_features/",
+        type: "GET",
+        async: set_async,
+        dataType: 'json',
+        data: {
+            product_name: document.getElementById("id_product_type").value,
+            field: field_name
+        }
+    });
+    return widgets_call_result.responseText;
+};
+
+function getModelObjects(model, callback) {
+    var widgets_call_result = $.ajax({
+        url: "/api/get_model_objects/",
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        data: {
+            model: model
+        }
+    });
+    return widgets_call_result.responseText;
 };
 
 // Autocompletes region field
@@ -384,10 +447,4 @@ $(function () {
         });
 });
 
-function emptyFieldSize(n) {
-    // here we add some more space below extra settings
-    var empty_field = document.getElementById("empty-black-space");
-    var size = n * 50;
-    var size_str = size.toString() + "px"
-    empty_field.style.height = size_str;
-};
+// ## end of AJAX requests ## //
