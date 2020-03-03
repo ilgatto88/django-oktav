@@ -70,6 +70,24 @@ class RegionOption(models.Model):
 class OutputType(models.Model):
     name = models.CharField(max_length=10)
     print_name = models.CharField(max_length=100)
+    otype = models.CharField(max_length=100, default='None')
 
     def __str__(self):
-        return self.print_name
+        return self.name
+
+class Analysis(models.Model):
+    filename = models.CharField(max_length=256, null=False, default='')
+    creation = models.DateTimeField(auto_now_add=True)
+    content_type = models.CharField(max_length=256, null=False)
+    analysis_details = models.TextField(default='')
+    file = models.FileField()
+
+    @classmethod
+    def create(cls, content_type, filename, file):
+        rf = cls(content_type = content_type)
+        rf.file.save(filename, file)
+        return rf
+
+    def __str__(self):
+        return self.filename
+    

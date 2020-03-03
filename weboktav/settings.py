@@ -143,3 +143,7 @@ DOCS_STATIC_NAMESPACE = ''
 with open(MKDOCS_CONFIG, 'r') as f:
     DOCS_DIR = yaml.load(f, Loader=yaml.Loader)['site_dir']
     DOCS_STATIC_NAMESPACE = os.path.basename(DOCS_DIR)
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

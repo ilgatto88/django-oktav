@@ -3,8 +3,11 @@ from .forms import NewProductRequestForm
 from oktav.products.product_processing import ProductRequest
 from oktav.visualization.vis import createMapColors
 from oktav.utils import importObject
-from .models import ProductFeature, Widget, Season
-from django.http import HttpResponse
+from .models import ProductFeature, Widget, Season, Analysis, OutputType
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.http import FileResponse
+from django.views.generic.detail import DetailView
 
 import json
 
@@ -17,7 +20,7 @@ def product_request(request):
     if request.method == 'POST':
         prf = NewProductRequestForm(request.POST)
         print(prf.errors)
-        print(request.POST)
+        #print(request.POST)
         if prf.is_valid():
 
             ########## visual settings ##########
@@ -105,7 +108,7 @@ def product_request(request):
             else:
                 refper = None
             ################################
-            print(param)
+
             PR = ProductRequest(
                 product_type = request.POST.get('product_type'),
                 parameter = param,
@@ -120,22 +123,31 @@ def product_request(request):
                 upper_height_filter = adj_upper_height_filter,
                 visual_settings = visual_settings,
                 output_path = request.POST.get('output_path'),
-                output_type = request.POST.get('output_type')
+                output_type = request.POST.get('output_type'),
+                django = True
             )
             print(PR)
             product_func = ProductFeature.objects.filter(name = PR.product_type)[0].function
             func = getattr(PR, product_func)
-            func()
+            #func()
+
+            otype = OutputType.objects.filter(name = PR.output_type)[0].otype
+            ofilename = PR.outname.split('/')[-1]
+
+            analysis = Analysis(content_type = otype, filename = ofilename, analysis_details = PR)
+            analysis.file.save(ofilename, func())
+            analysis.save()
+
+            print(analysis.id)
             
-            return redirect(reverse('product_result'))
-        else:
-            print('invalid')
+            return HttpResponseRedirect(reverse('product_result', args=(analysis.id,)))
     else:
         prf = NewProductRequestForm()
         return render(request, 'products.html', {'product_form': prf})
 
-def product_result(request):
-    return render(request, 'product_result.html')
+def product_result(request, pk):
+    analysis = get_object_or_404(Analysis, pk = pk)
+    return render(request, 'product_result.html', {'analysis': analysis})
 
 def index(request):
     return render(request, 'index.html')
@@ -214,3 +226,8 @@ def getModelObjects(request):
         
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+def download(request, pk):
+    analysis = get_object_or_404(Analysis, pk = pk)
+    file = analysis.file
+    return FileResponse(file, as_attachment=True, filename=file.name)

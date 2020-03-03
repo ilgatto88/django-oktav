@@ -7,6 +7,19 @@
     width: fit-content;
 }
 
+.product-result {
+    border-radius: 25px;
+    background-color: rgba(255,255,255,0.5);
+    position: absolute;
+    left: 5%;
+    top: 100px;
+    width: 50%;
+}
+
+.result-button-font {
+    font-size:15px;
+}
+
 .oktav-dropdown {
     font-size: 18px;
     font-family: 'Varela Round';

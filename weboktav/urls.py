@@ -17,15 +17,19 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from products import views as products_view
 from region import views as region_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', products_view.index, name = 'index'),
     url(r'^products', products_view.product_request, name = 'products'),
-    url(r'^result', products_view.product_result, name = 'product_result'),
+    url(r'^product_result/(?P<pk>\d+)/$', products_view.product_result, name = 'product_result'),
     url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions'),
     url(r'^api/get_product_features/', products_view.fetch_product_features, name = 'get_product_features'),
     url(r'^api/get_static_file/', products_view.get_static_file, name = "get_static_file"),
     url(r'^api/get_model_objects/', products_view.getModelObjects, name = "get_model_objects"),
-    url(r'^docs/', include('docs.urls'))
-]
+    url(r'^docs/', include('docs.urls')),
+    url(r'^file/(?P<pk>\d+)/$', products_view.download, name='file-download'),
+
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
