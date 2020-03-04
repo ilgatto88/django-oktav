@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView
 
 import json
 
@@ -137,17 +138,23 @@ def product_request(request):
             analysis = Analysis(content_type = otype, filename = ofilename, analysis_details = PR)
             analysis.file.save(ofilename, func())
             analysis.save()
-
-            print(analysis.id)
             
-            return HttpResponseRedirect(reverse('product_result', args=(analysis.id,)))
+            return HttpResponseRedirect(reverse('analysis_result', args=(analysis.id,)))
     else:
         prf = NewProductRequestForm()
         return render(request, 'products.html', {'product_form': prf})
 
-def product_result(request, pk):
+def analysis_result(request, pk):
     analysis = get_object_or_404(Analysis, pk = pk)
-    return render(request, 'product_result.html', {'analysis': analysis})
+    return render(request, 'analysis_result.html', {'analysis': analysis})
+
+
+class AnalysisDeleteView(DeleteView):
+    model = Analysis
+    template_name="analysis_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse('index')
 
 def index(request):
     return render(request, 'index.html')

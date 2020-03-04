@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header class="masthead">
+        <div class="container d-inline-flex col-lg-10">
+            <section class="signup-section-oktav">
+                <div class="container justify-content-center mt-2">
+                        <h2 class="text-nowrap" style="font-weight:700;color:red;">Please confirm deletion</h2>
+                        <hr class="mt-0" style="background-color:black;">
+                </div>
+                <form method="post" class="m-3">{% csrf_token %}
+                    <p class="mb-2">Are you sure you want to permanently remove this analysis?</p>
+                    <button type="submit" value="Delete" class="btn btn-success" style="padding:15px;">Confirm</button>
+                    <a href="{% url "analysis_result" analysis.id %}"<button type="button" class="btn btn-secondary" style="padding:15px;">Cancel</a>
+                </form>
+            </section>
+        </div>
+    </header>
+{% endblock %}
