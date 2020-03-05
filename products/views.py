@@ -153,13 +153,10 @@ def product_request(request):#, status, pk):
             ofilename = PR.outname.split('/')[-1]
 
             analysis = Analysis(content_type = otype, filename = ofilename, analysis_details = PR)
-            if PR.output_type not in ['png', 'pdf', 'txt', 'csv']:
-                func()
-                def_filename = settings.MEDIA_ROOT + '/' + ofilename
-                analysis.file.save(def_filename, File(open(def_filename, 'rb')))
-                analysis.file.name = ofilename
-            else:
-                analysis.file.save(ofilename, func())
+            func()
+            def_filename = settings.MEDIA_ROOT + '/' + ofilename
+            analysis.file.save(def_filename, File(open(def_filename, 'rb')))
+            analysis.file.name = ofilename
             analysis.save()
             
             #print(request.POST)
