@@ -144,7 +144,7 @@ def product_request(request):#, status, pk):
                 django = True,
                 django_path = settings.BASE_DIR + '/media/'
             )
-            #print(PR.__dict__)
+            print(PR.__dict__)
             product_func = ProductFeature.objects.filter(name = PR.product_type)[0].function
             func = getattr(PR, product_func)
 

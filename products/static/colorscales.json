@@ -29,11 +29,11 @@
     "delta": {    
             "name": "delta",
             "minval": -60,
-            "maxval": 70,
+            "maxval": 60,
             "step":   10,
             "bins": "None",
             "unit": "%",
-            "description": "base min: -60, base max: +70, base step = 10, mainly for [%]"
+            "description": "base min: -60, base max: +60, base step = 10, mainly for [%]"
             },
     "echo": {    
             "name": "echo",

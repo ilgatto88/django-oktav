@@ -60,8 +60,8 @@ class NewProductRequestForm(forms.Form):
     reference_period_checkbox = forms.BooleanField(label='Reference period', required=False, initial=True)
     reference_period_start = forms.IntegerField(label='.', initial=1971, required=False, min_value=1961, max_value=1981)
     reference_period_end = forms.IntegerField(label='.', initial=2000, required=False, min_value=1990, max_value=2010)
-    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False, min_value=0, max_value=10000)
-    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False, min_value=0, max_value=10000)
+    lower_height_filter = forms.IntegerField(label='Lower height filter', initial=0, required=False, min_value=0, max_value=9999)
+    upper_height_filter = forms.IntegerField(label='Upper height filter', initial=0, required=False, min_value=0, max_value=9999)
 
     output_path = forms.CharField(label='Output path', initial=BASE_OUTPUT_PATH)
     output_type = forms.ChoiceField(label='Output type', choices=OUTPUT_TYPE_CHOICES)
@@ -76,8 +76,8 @@ class NewProductRequestForm(forms.Form):
 
     ## Colorscale
     colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
-    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.00, decimal_places=2, required=False, max_value=50000, min_value=-50000)
-    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.00, decimal_places=2, required=False, max_value=50000, min_value=-50000)
+    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, max_digits=6, required=False, max_value=99999, min_value=-99999)
+    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, decimal_places=1, max_digits=6, required=False, max_value=99999, min_value=-99999)
     colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
     colorscale_colorbar_dict_extra = forms.CharField(widget=forms.HiddenInput(), required=False)
 

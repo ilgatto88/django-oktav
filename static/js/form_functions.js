@@ -85,9 +85,9 @@ function createColorBarDict() {
     if (field_values['step'] != 0.0) {
         if (field_values['step'] > 0) {
             var new_min = field_values['minval'];
-            var new_max = new_min + (color_count * field_values['step']);
+            var new_max = new_min + ((color_count-1) * field_values['step']);
         } else {
-            var new_min = field_values['minval'] + (color_count * field_values['step']);
+            var new_min = field_values['minval'] + ((color_count-1) * field_values['step']);
             var new_max = field_values['minval'];
         };
 
@@ -97,7 +97,7 @@ function createColorBarDict() {
             'maxval': parseFloat(new_max.toFixed(1)),
             'step_size': field_values['step'],
             'bins': 'None',
-            'color_count': color_count + 1,
+            'color_count': color_count,
             'reverse': field_values['reverse']
         };
 
@@ -123,29 +123,16 @@ function create_html_colordict(redraw = false) {
         };
         var minval = colorscale_fields['minval'];
         var step = colorscale_fields['step'];
-        value_array = []
-        for (var i = 0; i < selected_colors.length; i++) {
-            val = (minval + (i * step)).toFixed(1);
-            value_array.push(val);
-        };
     } else {
         var minval = selected_colorscale_features["minval"];
         var step = selected_colorscale_features["step"];
         document.getElementById("id_colorscale_minval_extra").value = minval;
-        if (step != 'fixed') {
-            document.getElementById("id_colorscale_step_size_extra").value = step;
-            value_array = []
-            for (var i = 0; i < selected_colors.length; i++) {
-                val = (minval + (i * step)).toFixed(1);
-                value_array.push(val);
-            };
-
-        } else {
-            value_array = []
-            for (var i = 0; i < selected_colors.length; i++) {
-                value_array.push((selected_colorscale_features["bins"][i]).toFixed(1));
-            };
-        };
+        document.getElementById("id_colorscale_step_size_extra").value = step;
+    };
+    value_array = []
+    for (var i = 0; i < selected_colors.length; i++) {
+        val = (minval + (i * step)).toFixed(1);
+        value_array.push(val);
     };
 
     var html_colordict = {
