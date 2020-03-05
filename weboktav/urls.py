@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', products_view.index, name = 'index'),
-    url(r'^products', products_view.product_request, name = 'products'),
+    url(r'^products/', products_view.product_request, name = 'products'),
+    #url(r'^products/(?P<status>\w+)-(?P<pk>\d+/$', products_view.product_request, name = 'products'),
     url(r'^analysis_result/(?P<pk>\d+)/$', products_view.analysis_result, name = 'analysis_result'),
-    #url(r'^analysis_delete/(?P<pk>\d+)/$', products_view.analysis_delete, name = 'analysis_delete'),
     url(r'^analysis_delete/(?P<pk>\d+)/$', products_view.AnalysisDeleteView.as_view(), name = 'analysis_delete'),
     url(r'^api/get_regions/', region_views.fetch_regions, name = 'get_regions'),
     url(r'^api/get_product_features/', products_view.fetch_product_features, name = 'get_product_features'),

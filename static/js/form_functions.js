@@ -101,7 +101,6 @@ function createColorBarDict() {
             'reverse': field_values['reverse']
         };
 
-        console.log(colorbar_dict);
         return colorbar_dict;
     } else {
         alert("Step size is zero!")
@@ -226,7 +225,7 @@ function emptyFieldSize(n) {
     // here we add some more space below extra settings
     var empty_field = document.getElementById("empty-black-space");
     var r = (n > 0) ? -1 : 0;
-    var size = (n - r) * 70;
+    var size = (n - r) * 80;
     var size_str = size.toString() + "px"
     empty_field.style.height = size_str;
 };
@@ -256,6 +255,33 @@ function productTypeSettings() {
     } else {
         parameter2_field.style.visibility = "hidden";
         parameter2_field.disabled = true;
+    };
+
+    // set period boundaries
+    var dataset = parsed_productFeatures['dataset'];
+    var ps = document.getElementById("id_period_start");
+    var pe = document.getElementById("id_period_end");
+    if (dataset == 'oeks') {
+        ps.value = "2021";
+        pe.value = "2050";
+        ps.min = "1971";
+        ps.max = "2099";
+        pe.min = "1972";
+        pe.max = "2100";
+    } else if (dataset == 'spartacus') {
+        ps.value = "1961";
+        pe.value = "1990";
+        ps.min = "1961";
+        ps.max = "2017";
+        pe.min = "1962";
+        pe.max = "2018";
+    } else if (dataset == 'spartacus_oeks') {
+        ps.value = "1971";
+        pe.value = "2100";
+        ps.min = "1971";
+        ps.max = "2099";
+        pe.min = "1972";
+        pe.max = "2100";
     };
 
     // lock reference perid checkbox
@@ -288,11 +314,13 @@ function enableDisableCheckboxes(pc) {
     var product_checkboxes = JSON.parse(pc)['widgets'];
     var product_widget_keys = Object.keys(product_checkboxes);
     var all_widgets = JSON.parse(getModelObjects('widget'))['objects'];
-    for (var i = 0; i < all_widgets.length; i++) {
-        var elem = all_widgets[i];
+    var all_keys = Object.keys(all_widgets);
+    var key_number = all_keys.length;
+    for (var i = 0; i < key_number; i++) {
+        var elem = all_keys[i];
         var extended_widget_name = "id_".concat(elem).concat("_extra");
         if (elem != 'colorscale') {
-            if (product_widget_keys.includes(elem)) {
+            if (product_widget_keys.includes(elem) && all_widgets[elem]['enabled'] == true) {
                 document.getElementById(extended_widget_name).style.display = "block";
             } else {
                 document.getElementById(extended_widget_name).style.display = "none";

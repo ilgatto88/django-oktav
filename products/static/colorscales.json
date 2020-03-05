@@ -28,12 +28,12 @@
             },
     "delta": {    
             "name": "delta",
-            "minval": 0,
-            "maxval": 300,
-            "step":   "fixed",
-            "bins": [0,15,30,45,60,75,90,110,130,150,185,235,300],
+            "minval": -60,
+            "maxval": 70,
+            "step":   10,
+            "bins": "None",
             "unit": "%",
-            "description": "base min: 0, base max: +300, base step = fixed color scale, mainly for [%]"
+            "description": "base min: -60, base max: +70, base step = 10, mainly for [%]"
             },
     "echo": {    
             "name": "echo",

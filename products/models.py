@@ -1,6 +1,7 @@
 import os
 from django.db import models
 from django.dispatch import receiver
+from .storage import OverWriteStorage
 
 class ProductFeature(models.Model):
     name = models.CharField(max_length=100)
@@ -82,7 +83,7 @@ class Analysis(models.Model):
     creation = models.DateTimeField(auto_now_add=True)
     content_type = models.CharField(max_length=256, null=False)
     analysis_details = models.TextField(default='')
-    file = models.FileField()
+    file = models.FileField(max_length=200, storage=OverWriteStorage())
 
     @classmethod
     def create(cls, content_type, filename, file):
@@ -92,6 +93,9 @@ class Analysis(models.Model):
 
     def __str__(self):
         return self.filename
+
+    class Meta:
+        verbose_name_plural = "analyses"
 
 @receiver(models.signals.post_delete, sender=Analysis)
 def auto_delete_file_on_delete(sender, instance, **kwargs):

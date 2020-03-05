@@ -42,7 +42,7 @@ class NewProductRequestForm(forms.Form):
     # Product settings
     product_type = forms.ChoiceField(label='Product type', choices=PRODUCT_TYPE_CHOICES)
     parameter = forms.ChoiceField(label='Parameter', choices=PARAMETER_CHOICES)
-    parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False, disabled=True)
+    parameter2 = forms.ChoiceField(label='2nd parameter', choices=PARAMETER_CHOICES, required=False)
     aggregation_period = forms.ChoiceField(label='Aggregation period', choices=AGGRETATION_PERIOD_CHOICES)
     season = forms.ChoiceField(label='Season', choices=SEASON_CHOICES, required=False, disabled=True)
     scenario = forms.ChoiceField(label='Scenario', choices=SCENARIO_CHOICES, required=False)
@@ -55,8 +55,8 @@ class NewProductRequestForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': "Start typing (2 letters needed)"})
         )
 
-    period_start = forms.IntegerField(label='Period', initial=2021, min_value=1961, max_value=2099)
-    period_end = forms.IntegerField(label='.', initial=2050, min_value=1962, max_value=2100)
+    period_start = forms.IntegerField(label='Period')
+    period_end = forms.IntegerField(label='.')
     reference_period_checkbox = forms.BooleanField(label='Reference period', required=False, initial=True)
     reference_period_start = forms.IntegerField(label='.', initial=1971, required=False, min_value=1961, max_value=1981)
     reference_period_end = forms.IntegerField(label='.', initial=2000, required=False, min_value=1990, max_value=2010)
@@ -76,8 +76,8 @@ class NewProductRequestForm(forms.Form):
 
     ## Colorscale
     colorscale_name_extra = forms.ChoiceField(label="Colorscale", required=False, choices=COLORBAR_CHOICES)
-    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
-    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.0, decimal_places=1, required=False, max_value=50000, min_value=-50000)
+    colorscale_minval_extra = forms.DecimalField(label="First value", initial=0.00, decimal_places=2, required=False, max_value=50000, min_value=-50000)
+    colorscale_step_size_extra = forms.DecimalField(label="Step size", initial=0.00, decimal_places=2, required=False, max_value=50000, min_value=-50000)
     colorscale_reverse_extra = forms.BooleanField(label="Reverse", initial=False, required=False)
     colorscale_colorbar_dict_extra = forms.CharField(widget=forms.HiddenInput(), required=False)
 
