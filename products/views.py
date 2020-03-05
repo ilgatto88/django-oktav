@@ -147,14 +147,14 @@ def product_request(request):#, status, pk):
             #print(PR.__dict__)
             product_func = ProductFeature.objects.filter(name = PR.product_type)[0].function
             func = getattr(PR, product_func)
-            #func()
 
             otype = OutputType.objects.filter(name = PR.output_type)[0].otype
             ofilename = PR.outname.split('/')[-1]
+            def_filename = settings.MEDIA_ROOT + '/' + ofilename
 
             analysis = Analysis(content_type = otype, filename = ofilename, analysis_details = PR)
             func()
-            def_filename = settings.MEDIA_ROOT + '/' + ofilename
+            
             analysis.file.save(def_filename, File(open(def_filename, 'rb')))
             analysis.file.name = ofilename
             analysis.save()

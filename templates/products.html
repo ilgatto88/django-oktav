@@ -135,31 +135,44 @@
           <div class="form-row justify-content-center">
             <div class="form-col w-50">
               <div class="form-group ml-4">
-                <label for={{ product_form.output_path.id_for_label }}>{{ product_form.output_path.label }}</label>
-                {{ product_form.output_path|add_class:"oktav-dropdown form-control" }}
-              </div>
-            </div>
-            <div class="form-col w-50">
-              <div class="form-group ml-2 mr-4">
                 <label for={{ product_form.output_type.id_for_label }}>{{ product_form.output_type.label }}</label>
                 {{ product_form.output_type|add_class:"oktav-dropdown form-control" }}
               </div>
             </div>
+            <div class="form-col w-50">
+              <div class="form-group ml-2 mr-4">
+                <label for={{ product_form.output_path.id_for_label }} style="visibility:hidden;">{{ product_form.output_path.label }}</label>
+                {{ product_form.output_path|add_class:"oktav-dropdown form-control" }}
+                <script> document.getElementById("id_output_path").style.visibility = "hidden";</script>
+              </div>
+            </div>
           </div>
-          <div class="form-row mb-2">
-            <div class="col w-50 ml-4">
+
+          <div class="form-row mt-2 mb-2">
+            <div class="col w-25 ml-4">
               <div class="form-group">
                 <button class="btn btn-secondary" id="collapse_button"
                         type="button" title="Addition settings for the selected product"
                         data-toggle="collapse" data-target="#CollapseVisSet"
-                        aria-expanded="false" aria-controls="CollapseVisSet">
+                        aria-expanded="false" aria-controls="CollapseVisSet"
+                        style="padding:10px;">
                   Settings
                 </button>
               </div>
             </div>
-            <div class="col w-50 mr-4">
+            <div class="col w-25">
               <div class="form-group">
-                <button type="submit" class="btn btn-primary" style="color:black;background-color:#369e94;">
+                <button type="button" onclick="refreshPage()" class="btn btn-warning" style="padding:10px;">
+                  Reset fields
+                </button>
+                <script>
+                  function refreshPage() { window.location.reload();}
+                </script>
+              </div>
+            </div>
+            <div class="col w-25 mr-4">
+              <div class="form-group">
+                <button type="submit" class="btn btn-info" style="padding:10px;">
                   Send request
                 </button>
               </div>

@@ -224,8 +224,8 @@ function collapseEvents() {
 function emptyFieldSize(n) {
     // here we add some more space below extra settings
     var empty_field = document.getElementById("empty-black-space");
-    var r = (n > 0) ? -1 : 0;
-    var size = (n - r) * 80;
+    var r = (n > 0) ? 1 : 0;
+    var size = (n - r) * 70;
     var size_str = size.toString() + "px"
     empty_field.style.height = size_str;
 };
