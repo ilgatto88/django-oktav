@@ -1,12 +1,12 @@
 {
     "alfa": {    
             "name": "alfa",
-            "minval": -20.0,
-            "maxval": 35.0,
+            "minval": -19.5,
+            "maxval": 35.5,
             "step":   1,
             "bins": "None",
             "unit": "°C",
-            "description": "base min: -20, base max: +35, base step: 1, (abs(min)+abs(max))/step should be 55, mainly for [°C] or [days]"
+            "description": "base min: -19.5, base max: +35.5, base step: 1, (abs(min)+abs(max))/step should be 55, mainly for [°C] or [days]"
             },
     "bravo": {    
             "name": "bravo",
@@ -28,12 +28,12 @@
             },
     "delta": {    
             "name": "delta",
-            "minval": -60,
-            "maxval": 60,
+            "minval": -65,
+            "maxval": 55,
             "step":   10,
             "bins": "None",
             "unit": "%",
-            "description": "base min: -60, base max: +60, base step = 10, mainly for [%]"
+            "description": "base min: -65, base max: +55, base step = 10, mainly for [%]"
             },
     "echo": {    
             "name": "echo",
@@ -51,7 +51,7 @@
             "step":   5.0,
             "bins": "None",
             "unit": "days",
-            "description": "base min: -10, base max: +75, base step = 5, (abs(min)+abs(max))/step should be 17, mainly for [°C] or [days]"
+            "description": "base min: -10, base max: +80, base step = 5, (abs(min)+abs(max))/step should be 17, mainly for [°C] or [days]"
             },
     "golf": {                                            
             "name": "golf",
@@ -73,12 +73,12 @@
     },
     "india": {
             "name": "india",
-            "minval": -3.5,
-            "maxval": 3.5,
-            "step": 0.5,
+            "minval": -5.5,
+            "maxval": 4.5,
+            "step": 1.0,
             "bins": "None",
             "unit": "#",
-            "description": "base min: -3, base max: 3, base step = 0.5, (abs(min)+abs(max))/step should be 9, mainly for SPEI"  
+            "description": "base min: -5.5, base max: 4.5, base step = 1.0, (abs(min)+abs(max))/step should be 9, mainly for SPEI"  
     },
     "juliett": {
             "name": "juliett",
@@ -91,11 +91,11 @@
     },
     "kilo": {
             "name": "kilo",
-            "minval": -32,
-            "maxval": 40,
+            "minval": -33,
+            "maxval": 39,
             "step":    2,
             "bins": "None",
             "unit": "°C",
-            "description": "base min: -32, base max: 40, base step = 2, (abs(min)+abs(max))/step should be 38, mainly for [°C]"    
+            "description": "base min: -33, base max: 39, base step = 2, (abs(min)+abs(max))/step should be 38, mainly for [°C]"    
     }                                
 }

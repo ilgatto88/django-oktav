@@ -13,7 +13,7 @@
         <form method="post" autocomplete="off">
           {% csrf_token %}
 
-          <div class="container justify-content-center">
+          <div class="ml-3 w-50">
             <h2 class="text-black text-nowrap mt-4" style="font-weight:700;">Create a product request</h2>
             <hr class="mt-0" style="background-color:black;">
           </div>
@@ -188,6 +188,12 @@
                 </div>
               </div>
               <div class="form-row">
+                <div class="ml-4 mr-3 w-50">
+                  <h2 class="text-black text-nowrap" style="font-weight:300;">Colorscale settings</h2>
+                  <hr class="mt-0" style="background-color:black;">
+                </div>
+              </div>
+              <div class="form-row">
                 <div class="form-col col-lg-6">
                   <div class="form-group ml-4 mr-4">
                     <label for={{ product_form.colorscale_name_extra.id_for_label }}>{{ product_form.colorscale_name_extra.label }}</label>
@@ -217,13 +223,17 @@
                     {{ product_form.colorscale_reverse_extra|add_class:"oktav-dropdown checkbox form-control" }}
                   </div>
                 </div>
-                <div class="form-col col-lg-1 ml-4">
+                <div class="form-col col-lg-1 ml-4 mt-2">
                   <label></label>
-                  <button class="btn btn-success btn-sm" type="button" id="colorbar_generate_button" value="colorbar_dict">
+                  <button class="btn btn-success btn-sm" type="button" id="colorbar_generate_button" value="colorbar_dict" style="padding:10px;">
                     Redraw
                   </button>
                 </div>
               </div>
+            </div>
+            <div class="ml-3 mr-3 w-50">
+              <h2 class="text-black text-nowrap mt-2" style="font-weight:300;">Plot elements, methods, etc.</h2>
+              <hr class="mt-0" style="background-color:black;">
             </div>
             <div class="container" id="extra_settings">
               {% for widget in product_form %}
