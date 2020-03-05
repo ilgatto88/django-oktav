@@ -8,6 +8,7 @@ window.onload = function () {
     document.getElementById("colorbar_generate_button").onclick = reDrawColorBarButtonClicked;
     document.getElementById("id_reference_period_checkbox").onchange = enableReferencePeriodFields;
     document.getElementById("id_colorscale_name_extra").onchange = colorBarChanged;
+    document.getElementById("formfill_button").onclick = fillFormWithPOST;
 };
 
 function reDrawColorBarButtonClicked() {
@@ -468,3 +469,50 @@ $(function () {
 });
 
 // ## end of AJAX requests ## //
+
+// function to refill form
+
+function fillFormWithPOST() {
+    testDict = {
+        "id_product_type": "barcode_spartacus",
+        "id_scenario": "rcp26",
+        "id_parameter": "cdd",
+        "id_parameter2": "cdd",
+        "id_aggregation_period": "YS",
+        "id_season": "DJF",
+        "id_region_option": "austria",
+        "id_region": "",
+        "id_period_start": "2021",
+        "id_period_end": "2050",
+        "id_reference_period_checkbox": "on",
+        "id_reference_period_start": "1971",
+        "id_reference_period_end": "2000",
+        "id_lower_height_filter": "0",
+        "id_upper_height_filter": "0",
+        "id_output_type": "pdf",
+        "id_output_path": "",
+        "id_colorscale_colorbar_dict_extra": '{"color_scale":"alfa","minval":-19.5,"maxval":34.5,"step_size":1,"bins":"None","color_count":55,"reverse":false}',
+        "id_colorscale_name_extra": "alfa",
+        "id_colorscale_minval_extra": "-19.5",
+        "id_colorscale_step_size_extra": "1",
+        "id_colorscale_reverse_extra": "False",
+        "id_rivers_extra": "False",
+        "id_municipality_borders_extra": "False",
+        "id_state_borders_extra": "on",
+        "id_country_borders_extra": "False",
+        "id_hillshade_extra": "False",
+        "id_linediagram_grid_extra": "False",
+        "id_smooth_extra": "False",
+        "id_infobox_extra": "False",
+        "id_boxplot_extra": "False",
+        "id_title_extra": "False",
+        "id_secondary_y_axis_extra": "False"
+    };
+
+    var testDict_keys = Object.keys(testDict);
+    var i;
+    for (i = 0; i<testDict_keys.length;i++) {
+        document.getElementById(testDict_keys[i]).value = testDict[testDict_keys[i]];
+    };
+
+}
