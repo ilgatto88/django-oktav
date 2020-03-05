@@ -196,23 +196,28 @@ function createColorScaleDiv(colordict) {
 function collapseEvents() {
     var product_widgets = getProductFeatures(field_name = 'widgets');
     var parsed_product_widgets = JSON.parse(product_widgets);
-    var number_of_widgets = Object.keys(parsed_product_widgets['widgets']).length;
+    var widget_keys = Object.keys(parsed_product_widgets['widgets']);
+    var cscale = widget_keys.includes('colorscale');
+    var number_of_widgets = widget_keys.length;
 
     // here we add the extra buttons
     if (document.getElementById("collapse_button").getAttribute("aria-expanded") == "false") {
-        emptyFieldSize(number_of_widgets);
+        emptyFieldSize(number_of_widgets, colorscale = cscale);
         collapseColorBarChanges();
         enableDisableCheckboxes(product_widgets);
     } else {
-        emptyFieldSize(0);
+        emptyFieldSize(0, colorscale=false);
     };
 };
 
-function emptyFieldSize(n) {
+function emptyFieldSize(n, colorscale) {
     // here we add some more space below extra settings
     var empty_field = document.getElementById("empty-black-space");
     var r = (n > 0) ? 1 : 0;
-    var size = (n - r) * 70;
+    var size = (n - r) * 40;
+    if (colorscale == true) {
+        size = size + 300;
+    }
     var size_str = size.toString() + "px"
     empty_field.style.height = size_str;
 };
