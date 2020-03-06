@@ -15,9 +15,11 @@ Inside the db shell:
 
     '.tables' # Get a list of tables
     '.schema {table_name}' # Get scheme of a table
-    'CREATE TABLE IF NOT EXISTS "table_name" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "field1" varchar(10) NOT NULL, "field2" varchar(20) NOT NULL);' # Insert new table
+    '.quit' # Quit db shell
 
+    'CREATE TABLE IF NOT EXISTS "table_name" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "field1" varchar(10) NOT NULL, "field2" varchar(20) NOT NULL);' # Insert new table
+    'ALTER TABLE {table_name} ADD {column_name} status varchar(256);' # Add new column to table
     'DELETE FROM "table_name";' # reset table id counter, step 1
     'DELETE FROM sqlite_sequence WHERE name = "table_name";' # reset table id counter, step 2
     
-    '.quit' # Quit db shell
+

@@ -43,6 +43,7 @@ class Parameter(models.Model):
 class AggregationPeriod(models.Model):
     name = models.CharField(max_length=10)
     print_name = models.CharField(max_length=100)
+    enabled_parameters = models.CharField(max_length=256, default='')
 
     def __str__(self):
         return self.print_name
@@ -84,6 +85,7 @@ class Analysis(models.Model):
     content_type = models.CharField(max_length=256, null=False)
     analysis_details = models.TextField(default='')
     file = models.FileField(max_length=200, storage=OverWriteStorage())
+    settings_json = models.TextField(default='', max_length=4096)
 
     @classmethod
     def create(cls, content_type, filename, file):

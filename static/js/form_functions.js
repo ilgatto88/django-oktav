@@ -2,13 +2,13 @@ window.onload = function () {
     productTypeSettings();
 
     document.getElementById("id_region_option").onchange = enableRegionField;
-    document.getElementById("id_aggregation_period").onchange = enableSeasonField;
+    document.getElementById("id_aggregation_period").onchange = aggregationPeriodOnChange;
     document.getElementById("id_product_type").onchange = productTypeSettings;
     document.getElementById("collapse_button").onclick = collapseEvents;
     document.getElementById("colorbar_generate_button").onclick = reDrawColorBarButtonClicked;
     document.getElementById("id_reference_period_checkbox").onchange = enableReferencePeriodFields;
     document.getElementById("id_colorscale_name_extra").onchange = colorBarChanged;
-    document.getElementById("formfill_button").onclick = fillFormWithPOST;
+    //document.getElementById("formfill_button").onclick = fillFormWithPOST();
 };
 
 function reDrawColorBarButtonClicked() {
@@ -108,7 +108,7 @@ function createColorBarDict() {
     };
 };
 
-function create_html_colordict(redraw = false) {
+function create_html_colordict(redraw) {
     var colorscales = JSON.parse(getStaticFile('products/static/colorscales.json'));
     var colors = JSON.parse(getStaticFile('products/static/colors.json'));
 
@@ -117,7 +117,7 @@ function create_html_colordict(redraw = false) {
     var selected_colors = colors[colorscale_fields['colorscale']];
 
     var colorbar_reversed = false;
-    if (redraw == true) {
+    if (redraw) {
         if (colorscale_fields['reverse'] == true) {
             var selected_colors = selected_colors.reverse();
             colorbar_reversed = true;
@@ -155,7 +155,7 @@ function createColorScaleDiv(colordict) {
         return x.replace(/\.0/, "")
     };
 
-    if (colordict['values'].some(checkDigit) == false) {
+    if (!colordict['values'].some(checkDigit)) {
         var values_string = colordict['values'].map(replaceZero);
     } else {
         var values_string = colordict['values'];
@@ -216,7 +216,7 @@ function emptyFieldSize(n, colorscale) {
     var empty_field = document.getElementById("empty-black-space");
     var r = (n > 0) ? 1 : 0;
     var size = (n - r) * 40;
-    if (colorscale == true) {
+    if (colorscale) {
         size = size + 300;
     }
     var size_str = size.toString() + "px"
@@ -233,7 +233,7 @@ function productTypeSettings() {
     // enable scenario field
     var scenario_field = document.getElementById("id_scenario");
     var scenario_enabled = parsed_productFeatures['selectable_rcp'];
-    if (scenario_enabled == true) {
+    if (scenario_enabled) {
         scenario_field.disabled = false;
     } else {
         scenario_field.disabled = true;
@@ -242,7 +242,7 @@ function productTypeSettings() {
     // 2nd parameter field
     var second_param_field_enabled = parsed_productFeatures['has_second_parameter'];
     var parameter2_field = document.getElementById("parameter2_div");
-    if (second_param_field_enabled == true) {
+    if (second_param_field_enabled) {
         parameter2_field.style.visibility = "visible";
         parameter2_field.disabled = false;
     } else {
@@ -280,7 +280,7 @@ function productTypeSettings() {
     // lock reference perid checkbox
     var product_must_have_reference_period = parsed_productFeatures['must_have_reference_period'];
     var ref_per_checkbox = document.getElementById("id_reference_period_checkbox");
-    if (product_must_have_reference_period == true) {
+    if (product_must_have_reference_period) {
         ref_per_checkbox.required = true;
     } else {
         ref_per_checkbox.required = false;
@@ -294,7 +294,7 @@ function productTypeSettings() {
     enableDisableCheckboxes(product_widgets);
 
     // show/hide color related fields
-    if (product_widgets_str.includes("colorscale") == false) {
+    if (!product_widgets_str.includes("colorscale")) {
         document.getElementById("color_related_fields").style.display = "none";
     } else {
         document.getElementById("color_related_fields").style.display = "block";
@@ -311,7 +311,7 @@ function enableDisableCheckboxes(pc) {
     var key_number = all_keys.length;
     for (var i = 0; i < key_number; i++) {
         var elem = all_keys[i];
-        var extended_widget_name = "id_".concat(elem).concat("_extra");
+        var extended_widget_name = "id_".concat(elem).concat("_extra_div");
         if (elem != 'colorscale') {
             if (product_widget_keys.includes(elem) && all_widgets[elem]['enabled'] == true) {
                 document.getElementById(extended_widget_name).style.display = "block";
@@ -319,24 +319,40 @@ function enableDisableCheckboxes(pc) {
                 document.getElementById(extended_widget_name).style.display = "none";
             };
         };
-        
     };
 };
 
 // This function enables and disables the season field based on the aggregation_period field
-function enableSeasonField() {
+function aggregationPeriodOnChange() {
     var aggregation_period_value = document.getElementById("id_aggregation_period").value;
     if (aggregation_period_value == 'YS') {
         document.getElementById("id_season").disabled = true;
     } else {
         document.getElementById("id_season").disabled = false;
     };
+
+    // This part enables and disables parameters which are not available for the seasonal aggregation period
+    var enabled_params = JSON.parse(getEnabledParametersByAggregationPeriod(aggregation_period_value));
+    var parameter_fields = ['id_parameter', 'id_parameter2'];
+
+    for (i=0;i<parameter_fields.length;i++) {
+        var all_params = document.getElementById(parameter_fields[i]).options;
+        for (var j=0;j<all_params.length;j++) {
+            if (enabled_params.includes(all_params[j].value)) {
+                all_params[j].disabled = false;
+            } else {
+                all_params[j].disabled = true;
+            }
+        }
+    }
 };
 
 // This function enables and disables the region field based on the region_option field
-function enableRegionField() {
+function enableRegionField(make_empty=true) {
     region_option_value = document.getElementById("id_region_option").value;
-    document.getElementById("id_region").value = "";
+    if (make_empty) {
+        document.getElementById("id_region").value = "";
+    }
     if (region_option_value == 'austria') {
         document.getElementById("id_region").disabled = true;
     } else {
@@ -349,10 +365,14 @@ function enableReferencePeriodFields() {
     checkbox_state = document.getElementById("id_reference_period_checkbox").checked
     if (checkbox_state) {
         document.getElementById("id_reference_period_start").disabled = false;
+        document.getElementById("id_reference_period_start").required = true;
         document.getElementById("id_reference_period_end").disabled = false;
+        document.getElementById("id_reference_period_end").required = true;
     } else {
         document.getElementById("id_reference_period_start").disabled = true;
+        document.getElementById("id_reference_period_start").required = false;
         document.getElementById("id_reference_period_end").disabled = true;
+        document.getElementById("id_reference_period_end").required = false;
     };
 };
 
@@ -378,6 +398,19 @@ function select_output_types(product_features) {
 // ## end of form field functions ##
 
 // ## AJAX requests ## //
+
+function getAnalysisSettings(id, callback) {
+    var file_contents = $.ajax({
+        url: "/api/get_analysis_settings/",
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        data: {
+            analysis_id: id
+        }
+    });
+    return file_contents.responseText;
+};
 
 function getStaticFile(url, callback) {
     var file_contents = $.ajax({
@@ -417,6 +450,19 @@ function getModelObjects(model, callback) {
         }
     });
     return widgets_call_result.responseText;
+};
+
+function getEnabledParametersByAggregationPeriod(aggp_type) {
+    var file_contents = $.ajax({
+        url: "/api/get_enabled_parameters_by_aggp/",
+        type: "GET",
+        async: false,
+        dataType: 'json',
+        data: {
+            aggp_type: aggp_type
+        }
+    });
+    return file_contents.responseText;
 };
 
 // Autocompletes region field
@@ -472,47 +518,56 @@ $(function () {
 
 // function to refill form
 
-function fillFormWithPOST() {
-    testDict = {
-        "id_product_type": "barcode_spartacus",
-        "id_scenario": "rcp26",
-        "id_parameter": "cdd",
-        "id_parameter2": "cdd",
-        "id_aggregation_period": "YS",
-        "id_season": "DJF",
-        "id_region_option": "austria",
-        "id_region": "",
-        "id_period_start": "2021",
-        "id_period_end": "2050",
-        "id_reference_period_checkbox": "on",
-        "id_reference_period_start": "1971",
-        "id_reference_period_end": "2000",
-        "id_lower_height_filter": "0",
-        "id_upper_height_filter": "0",
-        "id_output_type": "pdf",
-        "id_output_path": "",
-        "id_colorscale_colorbar_dict_extra": '{"color_scale":"alfa","minval":-19.5,"maxval":34.5,"step_size":1,"bins":"None","color_count":55,"reverse":false}',
-        "id_colorscale_name_extra": "alfa",
-        "id_colorscale_minval_extra": "-19.5",
-        "id_colorscale_step_size_extra": "1",
-        "id_colorscale_reverse_extra": "False",
-        "id_rivers_extra": "False",
-        "id_municipality_borders_extra": "False",
-        "id_state_borders_extra": "on",
-        "id_country_borders_extra": "False",
-        "id_hillshade_extra": "False",
-        "id_linediagram_grid_extra": "False",
-        "id_smooth_extra": "False",
-        "id_infobox_extra": "False",
-        "id_boxplot_extra": "False",
-        "id_title_extra": "False",
-        "id_secondary_y_axis_extra": "False"
+function fillFormWithPOST(id) {
+    console.log(id);
+    var settings_dict = JSON.parse(getAnalysisSettings(id));
+    console.log(settings_dict);
+
+    var settings_dict_keys = Object.keys(settings_dict);
+
+    // separate dictionary keys
+    var settings_dict_keys_not_extra = [];
+    var settings_dict_keys_extra = [];
+    for (var i = 0; i<settings_dict_keys.length;i++) {
+        if (!settings_dict_keys[i].includes('_extra')) {
+            settings_dict_keys_not_extra.push(settings_dict_keys[i]);
+        } else {
+            settings_dict_keys_extra.push(settings_dict_keys[i]);
+        };
     };
 
-    var testDict_keys = Object.keys(testDict);
-    var i;
-    for (i = 0; i<testDict_keys.length;i++) {
-        document.getElementById(testDict_keys[i]).value = testDict[testDict_keys[i]];
+    // set the not 'extra' settings
+    for (var i = 0; i<settings_dict_keys_not_extra.length;i++) {
+        console.log(settings_dict_keys_not_extra[i], settings_dict[settings_dict_keys_not_extra[i]]);
+        if (!["on", "off", "True", "False"].includes(settings_dict[settings_dict_keys_not_extra[i]])) {
+            document.getElementById(settings_dict_keys_not_extra[i]).value = settings_dict[settings_dict_keys_not_extra[i]];
+        } else {
+            if (settings_dict[settings_dict_keys_not_extra[i]] == "on" || settings_dict[settings_dict_keys_not_extra[i]] == "True") {
+                document.getElementById(settings_dict_keys_not_extra[i]).checked = true;
+            } else if (settings_dict[settings_dict_keys_not_extra[i]] == "off" || settings_dict[settings_dict_keys_not_extra[i]] == "False") {
+                document.getElementById(settings_dict_keys_not_extra[i]).checked = false;
+            };
+        };
     };
 
-}
+    // disable enable region field
+    enableRegionField(make_empty=false);
+
+
+    // set the 'extra' settings
+    for (var i = 0; i<settings_dict_keys_extra.length;i++) {
+        console.log(settings_dict_keys_extra[i], settings_dict[settings_dict_keys_extra[i]]);
+        if (settings_dict[settings_dict_keys_extra[i]] == "on" || settings_dict[settings_dict_keys_extra[i]] == "True") {
+            document.getElementById(settings_dict_keys_extra[i]).checked = true;
+        } else if(settings_dict[settings_dict_keys_extra[i]] == "off" || settings_dict[settings_dict_keys_extra[i]] == "False") {
+            document.getElementById(settings_dict_keys_extra[i]).checked = false;
+        } else {
+            document.getElementById(settings_dict_keys_extra[i]).value = settings_dict[settings_dict_keys_extra[i]];
+        };
+    };
+
+    // now redraw colorscale
+    makeColorBarDivInnerHTMLEmpy();
+    createColorScaleDiv(create_html_colordict(redraw = true));
+};
+

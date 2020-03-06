@@ -36,21 +36,6 @@
           <div class="form-row justify-content-center">
             <div class="form-col w-50">
               <div class="form-group ml-4 mr-2">
-                <label for={{ product_form.parameter.id_for_label }}>{{ product_form.parameter.label }}</label>
-                {{ product_form.parameter|add_class:"oktav-dropdown form-control" }}
-              </div>
-            </div>
-            <div class="form-col w-50" id="parameter2_div">
-              <div class="form-group mr-4">
-                <label for={{ product_form.parameter2.id_for_label }}>{{ product_form.parameter2.label }}</label>
-                {{ product_form.parameter2|add_class:"oktav-dropdown form-control" }}
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row justify-content-center">
-            <div class="form-col w-50">
-              <div class="form-group ml-4 mr-2">
                 <label for={{ product_form.aggregation_period.id_for_label }}>{{ product_form.aggregation_period.label }}</label>
                 {{ product_form.aggregation_period|add_class:"oktav-dropdown form-control" }}
               </div>
@@ -59,6 +44,21 @@
               <div class="form-group mr-4">
                 <label for={{ product_form.season.id_for_label }}>{{ product_form.season.label }}</label>
                 {{ product_form.season|add_class:"oktav-dropdown form-control"|attr:"title:Only enabled if Aggregation period 'Seasonal' is selected" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-col w-50">
+              <div class="form-group ml-4 mr-2">
+                <label for={{ product_form.parameter.id_for_label }}>{{ product_form.parameter.label }}</label>
+                {{ product_form.parameter|add_class:"oktav-dropdown form-control" }}
+              </div>
+            </div>
+            <div class="form-col w-50" id="parameter2_div">
+              <div class="form-group mr-4">
+                <label for={{ product_form.parameter2.id_for_label }}>{{ product_form.parameter2.label }}</label>
+                {{ product_form.parameter2|add_class:"oktav-dropdown form-control" }}
               </div>
             </div>
           </div>
@@ -162,8 +162,8 @@
             </div>
             <div class="col w-25">
               <div class="form-group">
-                <button type="button" onclick="refreshPage()" class="btn btn-warning" style="padding:10px;">
-                  Reset fields
+                <button type="button" class="btn btn-warning" style="padding:10px;"> <!--onclick="refreshPage()"-->
+                  <a href="{% url 'products' %}"><font style="color:black;">Reset fields</font></a>
                 </button>
                 <script>
                   function refreshPage() { window.location.reload();}
@@ -177,13 +177,15 @@
                 </button>
               </div>
             </div>
+            <!--
             <div class="col w-25 mr-4">
               <div class="form-group">
                 <button type="button" id="formfill_button" class="btn btn-danger" style="padding:10px;">
-                  FormFill
+                  FormFill Test
                 </button>
               </div>
             </div>
+            -->
           </div>
 
           <div class="collapse" id="CollapseVisSet">
@@ -245,7 +247,7 @@
             <div class="container" id="extra_settings">
               {% for widget in product_form %}
                 {% if 'colorscale' not in widget.name and '_extra' in widget.name %}
-                  <div class="form-row" id="{{ widget.id_for_label }}">
+                  <div class="form-row" id="{{ widget.id_for_label|add:'_div' }}">
                     <div class="form-col col-lg-6 ml-2">
                       <div class="form-group mb-0">
                         <input type="hidden" name='{{ widget.id_for_label }}' value="False"></input>
@@ -264,4 +266,14 @@
   </header>
   <p class="fixed-black-space" style="height:0px;background-color: #161616;margin: 0;"></p>
   <p class="empty-black-space" id="empty-black-space"></p>
+{% endblock %}
+
+{% block refill %}
+  <script>
+    var actual_href_array = window.location.href.split('/');
+    var actual_page = actual_href_array[actual_href_array.length -3]
+    if (actual_page === 'product') {
+      setTimeout(() => { fillFormWithPOST({{ analysis_id }}); }, 500);
+    };
+  </script>
 {% endblock %}
