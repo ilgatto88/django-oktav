@@ -265,9 +265,9 @@ function productTypeSettings() {
         ps.value = "1961";
         pe.value = "1990";
         ps.min = "1961";
-        ps.max = "2017";
+        ps.max = "2018";
         pe.min = "1962";
-        pe.max = "2018";
+        pe.max = "2019";
     } else if (dataset == 'spartacus_oeks') {
         ps.value = "1971";
         pe.value = "2100";

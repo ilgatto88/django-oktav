@@ -24,7 +24,7 @@ def home(request):
 def requestPOSTFunction(request_post):
     prf = NewProductRequestForm(request_post)
     print(prf.errors)
-    print(request_post)
+    #print(request_post)
     if prf.is_valid():
 
         ########## visual settings ##########
@@ -164,7 +164,7 @@ def requestPOSTFunction(request_post):
         if region[0] == 'austria':
             region_list_for_settings = ''
         else:
-            region_list_for_settings = (', ').join(region)
+            region_list_for_settings = (', ').join(region) + ', '
 
         
         if request_post.get('aggregation_period') == 'YS':

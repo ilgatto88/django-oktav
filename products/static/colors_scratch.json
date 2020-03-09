@@ -1,0 +1,23 @@
+{
+    "lima": [
+    "#08306B",
+    "#3182BD",
+    "#AED1E4",
+    "#F7F7F7",
+    "#FCAE91",
+    "#DE2D26",
+    "#67000D"
+]
+}
+
+{
+    "lima": {
+            "name": "lima",
+            "minval": -3.5,
+            "maxval": 2.5,
+            "step":    1,
+            "bins": "None",
+            "unit": "°C",
+            "description": "base min: -2.5, base max: 3.5, base step = 1, (abs(min)+abs(max))/step should be 38, mainly for [°C]"    
+    }    
+}
